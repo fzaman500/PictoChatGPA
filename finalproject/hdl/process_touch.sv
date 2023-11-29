@@ -3,8 +3,6 @@
 module process_touch(
     input wire [8:0] x,
     input wire [7:0] y,
-    output [8:0] x_out,
-    output [7:0] y_out,
     output [2:0] color,
     output active_draw
 );
@@ -28,8 +26,6 @@ always_comb begin
     end else begin
         active_draw = 1;
     end
-    x_out = x;
-    y_out = y;
 end
 
 endmodule
