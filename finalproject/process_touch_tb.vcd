@@ -1,0 +1,62 @@
+$date
+	Wed Nov 29 10:35:03 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module process_touch_tb $end
+$var wire 3 ! col [2:0] $end
+$var wire 1 " ad $end
+$var reg 9 # x [8:0] $end
+$var reg 8 $ y [7:0] $end
+$scope module uut $end
+$var wire 9 % x [8:0] $end
+$var wire 8 & y [7:0] $end
+$var reg 1 " active_draw $end
+$var reg 3 ' color [2:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx '
+bx &
+bx %
+bx $
+bx #
+1"
+bx !
+$end
+#10000
+b11001000 $
+b11001000 &
+b11001000 #
+b11001000 %
+#20000
+b1010 $
+b1010 &
+b1010 #
+b1010 %
+#30000
+b0 !
+b0 '
+0"
+b11110 $
+b11110 &
+b11110 #
+b11110 %
+#40000
+b1 !
+b1 '
+b1010000 $
+b1010000 &
+b100011 #
+b100011 %
+#50000
+b10 !
+b10 '
+b1111000 $
+b1111000 &

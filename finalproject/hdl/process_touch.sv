@@ -3,8 +3,8 @@
 module process_touch(
     input wire [8:0] x,
     input wire [7:0] y,
-    output [2:0] color,
-    output active_draw
+    output logic [2:0] color,
+    output logic active_draw
 );
 
 //colors 0=black, 1=blue, 2=red, 3=green, 4=white

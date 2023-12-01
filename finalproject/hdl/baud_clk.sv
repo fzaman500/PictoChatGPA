@@ -4,7 +4,7 @@ module baud_clk(
     input wire clk,
     input wire rst_in,
     input wire enable,
-    output tick // generate a tick at the specified baud rate * oversampling
+    output logic tick // generate a tick at the specified baud rate * oversampling
     );
     parameter ClkFrequency = 100000000; //100MHz
     parameter Baud = 115200;
