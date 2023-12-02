@@ -22,35 +22,36 @@ always_ff @( posedge clk ) begin
         finished_sending <= 0;
         tx <= 1;
     end else if (baud_clk) begin
-            if (state == IDLE) begin
-                if (send_data_btn) begin
-                    state <= START;
-                end else begin
-                    tx <= 1;
-                end
-                finished_sending <= 0;
-            end else if (state == START) begin
-                tx <= 0; //set low start bit
-                state <= DEVELOP;
-                counter <= 0;
-            end else if (state == DEVELOP) begin
-                if (counter == 8'b0000_1000) begin
-                    state <= PARITY;
-                end else begin
-                    tx <= tx_data[counter];
-                    counter <= counter + 1;
-                end
-            end else if (state == STOP) begin
-                state <= IDLE;
-                tx <= 1; //end bit
-            end else if (state == PARITY) begin
-                tx <= ^tx_data;
-                finished_sending <= 1;
-                state <= STOP;
-            end else begin //default IDLE
-                state <= IDLE;
+        if (state == IDLE) begin
+            if (send_data_btn) begin
+                state <= START;
+            end else begin
                 tx <= 1;
             end
+            finished_sending <= 0;
+        end else if (state == START) begin
+            tx <= 0; //set low start bit
+            state <= DEVELOP;
+            counter <= 0;
+        end else if (state == DEVELOP) begin
+            if (counter == 8'b0000_1000) begin
+                state <= PARITY;
+            end else begin
+                tx <= tx_data[counter];
+                counter <= counter + 1;
+            end
+        end else if (state == STOP) begin
+            state <= IDLE;
+            tx <= 1; //end bit
+        end else if (state == PARITY) begin
+            tx <= 1; //just trying this
+            //tx <= ^tx_data;
+            finished_sending <= 1;
+            state <= STOP;
+        end else begin //default IDLE
+            state <= IDLE;
+            tx <= 1;
+        end
         
     end
 end

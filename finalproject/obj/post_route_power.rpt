@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date             : Fri Dec  1 23:18:34 2023
+| Date             : Sat Dec  2 00:05:01 2023
 | Host             : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
@@ -53,11 +53,11 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |       44 |       --- |             --- |
-|   LUT as Logic |    <0.001 |       17 |     32600 |            0.05 |
+| Slice Logic    |    <0.001 |       43 |       --- |             --- |
+|   LUT as Logic |    <0.001 |       16 |     32600 |            0.05 |
 |   Register     |    <0.001 |       14 |     65200 |            0.02 |
 |   Others       |     0.000 |        6 |       --- |             --- |
-| Signals        |    <0.001 |       29 |       --- |             --- |
+| Signals        |    <0.001 |       27 |       --- |             --- |
 | I/O            |    <0.001 |       11 |       210 |            5.24 |
 | Static Power   |     0.072 |          |           |                 |
 | Total          |     0.073 |          |           |                 |

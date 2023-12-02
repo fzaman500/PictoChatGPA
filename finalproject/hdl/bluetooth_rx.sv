@@ -36,9 +36,10 @@ always_ff @( posedge clk ) begin
         end else if (state == STOP) begin
             state <= IDLE;
         end else if (state == PARITY) begin
-            if (rx == ^curr_data) begin
+            if (rx == 1) begin //if (rx == ^curr_data) begin im trying to see just 1
                 data_out <= curr_data;
             end
+            
             state <= STOP;
             finished_receiving <= 1;
         end else begin //default IDLE
