@@ -83,6 +83,9 @@ async def uart_terminal():
             # some devices, like devices running MicroPython, expect Windows
             # line endings (uncomment line below if needed)
             # data = data.replace(b"\n", b"\r\n")
+            
+            data = data.replace(b"\r", b"") # TRYING THIS
+            data = data.replace(b"\n", b"") # TRYING THIS
 
             # Writing without response requires that the data can fit in a
             # single BLE packet. We can use the max_write_without_response_size

@@ -36,7 +36,6 @@ always_ff @( posedge clk ) begin
         end else if (state == DEVELOP) begin
             if (counter == 8'b0000_0111) begin
                 state <= STOP;
-                //state <= PARITY;
                 tx <= tx_data[counter];
             end else begin
                 tx <= tx_data[counter];
@@ -48,7 +47,6 @@ always_ff @( posedge clk ) begin
             finished_sending <= 1;
         end else if (state == PARITY) begin
             tx <= 1; //just trying this
-            //tx <= ^tx_data;
             state <= STOP;
         end else begin //default IDLE
             state <= IDLE;

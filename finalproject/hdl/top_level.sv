@@ -63,6 +63,14 @@ baud_wiz baud_gen (
   .clk_out(bluetooth_clk_real)
 );*/
 
+logic clean_ble_uart_tx;
+synchronizer synchronizer_inst (
+  .clk_in(clk_100mhz),
+  .rst_in(sys_rst),
+  .us_in(ble_uart_tx),
+  .s_out(clean_ble_uart_tx)
+);
+
 logic clean_btn1;
 debouncer debouncer_inst (
   .clk_in(clk_100mhz),
@@ -163,8 +171,7 @@ logic finished_receiving;
 logic [7:0] data_out;
 bluetooth_rx bt_rx_inst (
   .clk(clk_100mhz),
-  .baud_clk(bluetooth_clk_real),
-  .rx(ble_uart_tx), //flipped according to inst
+  .rx(clean_ble_uart_tx), //flipped according to inst
   .rst_in(sys_rst),
   .finished_receiving(finished_receiving),
   .data_out(data_out)
@@ -174,19 +181,9 @@ always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     display_val <= 32'hFEEDBEEF;
   end else if (finished_receiving) begin
-    display_val <= data_out;
+    display_val <= {display_val[23:0], data_out};
   end 
 end
-
-/*
-always_comb begin
-  if (finished_receiving) begin
-    rgb1= 0;
-  end else begin
-    rgb0= 1;
-  end
-end
-*/
 
 /*
 //Packet Decoder
