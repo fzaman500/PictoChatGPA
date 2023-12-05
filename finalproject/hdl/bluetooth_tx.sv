@@ -34,8 +34,10 @@ always_ff @( posedge clk ) begin
             state <= DEVELOP;
             counter <= 0;
         end else if (state == DEVELOP) begin
-            if (counter == 8'b0000_1000) begin
-                state <= PARITY;
+            if (counter == 8'b0000_0111) begin
+                state <= STOP;
+                //state <= PARITY;
+                tx <= tx_data[counter];
             end else begin
                 tx <= tx_data[counter];
                 counter <= counter + 1;
@@ -43,16 +45,17 @@ always_ff @( posedge clk ) begin
         end else if (state == STOP) begin
             state <= IDLE;
             tx <= 1; //end bit
+            finished_sending <= 1;
         end else if (state == PARITY) begin
             tx <= 1; //just trying this
             //tx <= ^tx_data;
-            finished_sending <= 1;
             state <= STOP;
         end else begin //default IDLE
             state <= IDLE;
             tx <= 1;
         end
-        
+    end else begin
+        finished_sending <= 0;
     end
 end
 

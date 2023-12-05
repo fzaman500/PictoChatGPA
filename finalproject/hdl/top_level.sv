@@ -10,8 +10,16 @@ module top_level(
   output logic ble_uart_cts, //flipped, if ready to give data from fpga, clear to send
   output logic ble_uart_rx,
   output logic [2:0] rgb0, //rgb led
-  output logic [2:0] rgb1 //rgb led
+  output logic [2:0] rgb1, //rgb led
+  output logic [3:0] ss0_an,//anode control for upper four digits of seven-seg display
+  output logic [3:0] ss1_an,//anode control for lower four digits of seven-seg display
+  output logic [6:0] ss0_c, //cathode controls for the segments of upper four digits
+  output logic [6:0] ss1_c //cathod controls for the segments of lower four digits
   );
+
+logic [6:0] ss_c; //used to grab output cathode signal for 7s leds
+assign ss0_c = ss_c; //control upper four digit's cathodes!
+assign ss1_c = ss_c; //same as above but for lower four digits!
 
 logic sys_rst;
 assign sys_rst = btn[0];
@@ -55,6 +63,14 @@ baud_wiz baud_gen (
   .clk_out(bluetooth_clk_real)
 );*/
 
+logic clean_btn1;
+debouncer debouncer_inst (
+  .clk_in(clk_100mhz),
+  .rst_in(sys_rst),
+  .dirty_in(btn[1]),
+  .clean_out(clean_btn1)
+);
+
 logic bluetooth_clk_real;
 baud_wiz_off_100 baud_clk_gen (
   .rst_in(sys_rst),
@@ -91,24 +107,43 @@ always_ff @(posedge clk_100mhz) begin
 end
 */
 
-logic [1:0] sending_fifo [7:0]; //this is 4 arrays of size 8 each right
-logic count_fifo;
+logic [7:0] sending_fifo [3:0]; //this is 2 arrays of size 8 each right
+logic [2:0] count_fifo;
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
-    packet <= 8'b0000_1010;
-    tx_finished <= 0;
+    packet <= 8'b0000_0000;
+    //tx_finished <= 0;
     count_fifo <= 0;
-    sending_fifo[0] <= 8'hBB;
-    sending_fifo[1] <= 8'h0A;
+    sending_fifo[0] <= 8'h56;
+    sending_fifo[1] <= 8'h61;
+    sending_fifo[2] <= 8'h21;
+    sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     if (tx_finished) begin
-      count_fifo <= count_fifo + 1;
-      sending_fifo[0] <= 8'hBB;
-      sending_fifo[1] <= 8'h0A;
-    end
+      if (count_fifo == 3) begin
+        count_fifo <= 0;
+      end else begin
+        count_fifo <= count_fifo + 1;
+      end
+      sending_fifo[0] <= 8'h56;
+      sending_fifo[1] <= 8'h61;
+      sending_fifo[2] <= 8'h21;
+      sending_fifo[3] <= 8'h0A; //from 0A
+  end else begin
     packet <= sending_fifo[count_fifo];
   end
+  end
 end
+
+logic [31:0] display_val;
+
+seven_segment_controller seven_segment_controller_inst (
+  .clk_in(clk_100mhz),
+  .rst_in(sys_rst),
+  .val_in(display_val),
+  .cat_out(ss_c),
+  .an_out({ss0_an, ss1_an})
+);
 
 //assign ble_uart_cts = 1;
 logic tx_finished;
@@ -117,7 +152,7 @@ bluetooth_tx bt_tx_inst (
   .baud_clk(bluetooth_clk_real),
   .tx_data(packet), //.tx_data(packet)
   .rst_in(sys_rst),
-  .send_data_btn(btn[1]), //computer ready request to send
+  .send_data_btn(clean_btn1), //computer ready request to send
   .tx(ble_uart_rx), //flipped according to inst
   .finished_sending(tx_finished)
 );
@@ -134,6 +169,14 @@ bluetooth_rx bt_rx_inst (
   .finished_receiving(finished_receiving),
   .data_out(data_out)
 );
+
+always_ff @(posedge clk_100mhz) begin
+  if (sys_rst) begin
+    display_val <= 32'hFEEDBEEF;
+  end else if (finished_receiving) begin
+    display_val <= data_out;
+  end 
+end
 
 /*
 always_comb begin

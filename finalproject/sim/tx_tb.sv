@@ -11,6 +11,11 @@ module tx_tb();
   logic baud_clk;
   logic finished_sending;
 
+  baud_wiz_off_100 uut2
+    (.clk_in(clk_in),
+    .rst_in(rst_in),
+    .valid_out(baud_clk)
+    );
 
   bluetooth_tx uut
           ( .clk(clk_in),
@@ -31,18 +36,18 @@ module tx_tb();
     $dumpfile("tx_tb.vcd"); //file to store value change dump (vcd)
     $dumpvars(0,tx_tb);
     $display("Starting Sim"); //print nice message at start
-    baud_clk = 1;
     send_data_btn = 1;
     clk_in = 0;
     rst_in = 0;
-    rts = 1;
     #10;
     rst_in = 1;
     #10;
     rst_in = 0;
-    #100
+    #100;
     tx_data = 8'b1010_1011;
-    #100000
+    #1000000;
+    tx_data = 8'b1010_1010;
+    #1000000;
     $display("Simulation finished");
     $finish;
   end
