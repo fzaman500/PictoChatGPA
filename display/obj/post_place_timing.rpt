@@ -1,0 +1,76 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
+| Date         : Thu Dec  7 15:55:47 2023
+| Host         : worker running 64-bit Ubuntu 20.04.6 LTS
+| Command      : report_timing -file obj/post_place_timing.rpt
+| Design       : top_level
+| Device       : 7s50-csga324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Fully Placed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             4.764ns  (required time - arrival time)
+  Source:                 touch/i2c_comm/period_counter_reg[8]/C
+                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            touch/i2c_comm/sending_i_reg[4]/R
+                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Path Group:             gclk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
+  Data Path Delay:        4.647ns  (logic 1.426ns (30.686%)  route 3.221ns (69.314%))
+  Logic Levels:           3  (LUT5=2 LUT6=1)
+  Clock Path Skew:        -0.030ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.833ns = ( 14.833 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.116ns
+    Clock Pessimism Removal (CPR):    0.254ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock gclk rise edge)       0.000     0.000 r  
+    N15                                               0.000     0.000 r  clk_100mhz (IN)
+                         net (fo=0)                   0.000     0.000    clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
+                         net (fo=1, estimated)        1.972     3.412    clk_100mhz_IBUF
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
+                         net (fo=53, estimated)       1.608     5.116    touch/i2c_comm/clk_100mhz_IBUF_BUFG
+    SLICE_X5Y70          FDRE                                         r  touch/i2c_comm/period_counter_reg[8]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X5Y70          FDRE (Prop_fdre_C_Q)         0.419     5.535 f  touch/i2c_comm/period_counter_reg[8]/Q
+                         net (fo=8, estimated)        0.981     6.516    touch/i2c_comm/period_counter[8]
+    SLICE_X5Y69          LUT5 (Prop_lut5_I1_O)        0.327     6.843 r  touch/i2c_comm/FSM_sequential_state[2]_i_8/O
+                         net (fo=5, estimated)        1.008     7.851    touch/i2c_comm/FSM_sequential_state[2]_i_8_n_0
+    SLICE_X2Y68          LUT5 (Prop_lut5_I0_O)        0.352     8.203 r  touch/i2c_comm/sending_i[8]_i_4/O
+                         net (fo=5, estimated)        0.579     8.782    touch/i2c_comm/sending_i[8]_i_4_n_0
+    SLICE_X1Y67          LUT6 (Prop_lut6_I2_O)        0.328     9.110 r  touch/i2c_comm/sending_i[7]_i_1/O
+                         net (fo=4, estimated)        0.653     9.763    touch/i2c_comm/sending_i[7]_i_1_n_0
+    SLICE_X2Y66          FDRE                                         r  touch/i2c_comm/sending_i_reg[4]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock gclk rise edge)      10.000    10.000 r  
+    N15                                               0.000    10.000 r  clk_100mhz (IN)
+                         net (fo=0)                   0.000    10.000    clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
+                         net (fo=1, estimated)        1.873    13.244    clk_100mhz_IBUF
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.335 r  clk_100mhz_IBUF_BUFG_inst/O
+                         net (fo=53, estimated)       1.498    14.833    touch/i2c_comm/clk_100mhz_IBUF_BUFG
+    SLICE_X2Y66          FDRE                                         r  touch/i2c_comm/sending_i_reg[4]/C
+                         clock pessimism              0.254    15.086    
+                         clock uncertainty           -0.035    15.051    
+    SLICE_X2Y66          FDRE (Setup_fdre_C_R)       -0.524    14.527    touch/i2c_comm/sending_i_reg[4]
+  -------------------------------------------------------------------
+                         required time                         14.527    
+                         arrival time                          -9.763    
+  -------------------------------------------------------------------
+                         slack                                  4.764    
+
+
+
+
