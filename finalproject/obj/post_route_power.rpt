@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date             : Tue Dec  5 18:51:56 2023
+| Date             : Thu Dec  7 15:44:57 2023
 | Host             : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
@@ -52,14 +52,14 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |      362 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      132 |     32600 |            0.40 |
+| Clocks         |    <0.001 |        3 |       --- |             --- |
+| Slice Logic    |    <0.001 |      370 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      135 |     32600 |            0.41 |
 |   CARRY4       |    <0.001 |       19 |      8150 |            0.23 |
-|   Register     |    <0.001 |      167 |     65200 |            0.26 |
+|   Register     |    <0.001 |      169 |     65200 |            0.26 |
 |   F7/F8 Muxes  |    <0.001 |        1 |     32600 |           <0.01 |
 |   Others       |     0.000 |       14 |       --- |             --- |
-| Signals        |    <0.001 |      292 |       --- |             --- |
+| Signals        |    <0.001 |      297 |       --- |             --- |
 | I/O            |    <0.001 |       34 |       210 |           16.19 |
 | Static Power   |     0.072 |          |           |                 |
 | Total          |     0.074 |          |           |                 |

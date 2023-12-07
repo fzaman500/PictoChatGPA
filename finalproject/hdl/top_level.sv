@@ -135,7 +135,7 @@ always_ff @(posedge clk_100mhz) begin
       end
       sending_fifo[0] <= 8'h56;
       sending_fifo[1] <= 8'h61;
-      sending_fifo[2] <= 8'h21;
+      sending_fifo[2] <= 8'h67;
       sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     packet <= sending_fifo[count_fifo];
@@ -180,7 +180,7 @@ bluetooth_rx bt_rx_inst (
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     display_val <= 32'hFEEDBEEF;
-  end else if (finished_receiving) begin
+  end else if (finished_receiving && ~(data_out == 8'h0A) && ~(data_out == 8'h0D) && ~(data_out == 8'h2E) && ~(data_out == 8'h64) && ~(data_out == 8'h65) && ~(data_out == 8'h74) && ~(data_out == 8'h72) && ~(data_out == 8'h61) && ~(data_out == 8'h52) && ~(data_out == 8'h54) && ~(data_out == 8'h20) && ~(data_out == 8'h73) && ~(data_out == 8'h55) && ~(data_out == 8'h41)) begin
     display_val <= {display_val[23:0], data_out};
   end 
 end
