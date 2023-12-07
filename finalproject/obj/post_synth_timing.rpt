@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec  7 15:44:46 2023
+| Date         : Thu Dec  7 18:21:27 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_synth_timing.rpt
 | Design       : top_level
@@ -13,7 +13,7 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 Timing Report
 
 Slack (MET) :             5.427ns  (required time - arrival time)
-  Source:                 seven_segment_controller_inst/segment_counter_reg[4]/C
+  Source:                 seven_segment_controller_inst/segment_counter_reg[6]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Destination:            seven_segment_controller_inst/segment_counter_reg[0]/R
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
@@ -40,11 +40,11 @@ Slack (MET) :             5.427ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.800     2.240    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.096     2.336 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, unplaced)       0.584     2.920    seven_segment_controller_inst/clk_100mhz_IBUF_BUFG
-                         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[4]/C
+                         net (fo=173, unplaced)       0.584     2.920    seven_segment_controller_inst/CLK
+                         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[6]/C
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.456     3.376 f  seven_segment_controller_inst/segment_counter_reg[4]/Q
-                         net (fo=2, unplaced)         0.752     4.128    seven_segment_controller_inst/segment_counter_reg[4]
+                         FDRE (Prop_fdre_C_Q)         0.456     3.376 f  seven_segment_controller_inst/segment_counter_reg[6]/Q
+                         net (fo=2, unplaced)         0.752     4.128    seven_segment_controller_inst/segment_counter_reg[6]
                          LUT4 (Prop_lut4_I1_O)        0.295     4.423 f  seven_segment_controller_inst/segment_state[7]_i_8/O
                          net (fo=1, unplaced)         0.449     4.872    seven_segment_controller_inst/segment_state[7]_i_8_n_0
                          LUT5 (Prop_lut5_I4_O)        0.124     4.996 f  seven_segment_controller_inst/segment_state[7]_i_4/O
@@ -60,7 +60,7 @@ Slack (MET) :             5.427ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.760    12.130    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.091    12.221 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, unplaced)       0.439    12.660    seven_segment_controller_inst/clk_100mhz_IBUF_BUFG
+                         net (fo=173, unplaced)       0.439    12.660    seven_segment_controller_inst/CLK
                          FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[0]/C
                          clock pessimism              0.115    12.775    
                          clock uncertainty           -0.035    12.740    

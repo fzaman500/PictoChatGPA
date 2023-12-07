@@ -122,9 +122,9 @@ always_ff @(posedge clk_100mhz) begin
     packet <= 8'b0000_0000;
     //tx_finished <= 0;
     count_fifo <= 0;
-    sending_fifo[0] <= 8'h56;
+    sending_fifo[0] <= 8'h42;
     sending_fifo[1] <= 8'h61;
-    sending_fifo[2] <= 8'h21;
+    sending_fifo[2] <= 8'h67;
     sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     if (tx_finished) begin
@@ -133,7 +133,7 @@ always_ff @(posedge clk_100mhz) begin
       end else begin
         count_fifo <= count_fifo + 1;
       end
-      sending_fifo[0] <= 8'h56;
+      sending_fifo[0] <= 8'h42;
       sending_fifo[1] <= 8'h61;
       sending_fifo[2] <= 8'h67;
       sending_fifo[3] <= 8'h0A; //from 0A
@@ -155,6 +155,7 @@ seven_segment_controller seven_segment_controller_inst (
 
 //assign ble_uart_cts = 1;
 logic tx_finished;
+logic busy_tx;
 bluetooth_tx bt_tx_inst (
   .clk(clk_100mhz),
   .baud_clk(bluetooth_clk_real),
@@ -162,9 +163,9 @@ bluetooth_tx bt_tx_inst (
   .rst_in(sys_rst),
   .send_data_btn(clean_btn1), //computer ready request to send
   .tx(ble_uart_rx), //flipped according to inst
-  .finished_sending(tx_finished)
+  .finished_sending(tx_finished),
+  .busy_out(busy_tx)
 );
-
 
 logic finished_receiving;
 //Recieving
@@ -180,23 +181,10 @@ bluetooth_rx bt_rx_inst (
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     display_val <= 32'hFEEDBEEF;
-  end else if (finished_receiving && ~(data_out == 8'h0A) && ~(data_out == 8'h0D) && ~(data_out == 8'h2E) && ~(data_out == 8'h64) && ~(data_out == 8'h65) && ~(data_out == 8'h74) && ~(data_out == 8'h72) && ~(data_out == 8'h61) && ~(data_out == 8'h52) && ~(data_out == 8'h54) && ~(data_out == 8'h20) && ~(data_out == 8'h73) && ~(data_out == 8'h55) && ~(data_out == 8'h41)) begin
+  end else if (finished_receiving) begin
     display_val <= {display_val[23:0], data_out};
   end 
 end
-
-/*
-//Packet Decoder
-logic [8:0] x_to_spi;
-logic [7:0] y_to_spi;
-logic [2:0] color_to_spi;
-pkt_dec pkt_dec_inst (
-  .pkt(data_out),
-  .y(),
-  .x(),
-  .color()
-);
-*/
 
 endmodule // top_level
 `default_nettype wire

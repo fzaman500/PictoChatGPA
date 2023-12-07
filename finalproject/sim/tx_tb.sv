@@ -10,6 +10,7 @@ module tx_tb();
   logic tx;
   logic baud_clk;
   logic finished_sending;
+  logic busy_out;
 
   baud_wiz_off_100 uut2
     (.clk_in(clk_in),
@@ -24,7 +25,8 @@ module tx_tb();
             .rst_in(rst_in),
             .send_data_btn(send_data_btn),
             .tx(tx),
-            .finished_sending(finished_sending)
+            .finished_sending(finished_sending),
+            .busy_out(busy_out)
           );
 
   always begin
@@ -36,7 +38,7 @@ module tx_tb();
     $dumpfile("tx_tb.vcd"); //file to store value change dump (vcd)
     $dumpvars(0,tx_tb);
     $display("Starting Sim"); //print nice message at start
-    send_data_btn = 1;
+    send_data_btn = 0;
     clk_in = 0;
     rst_in = 0;
     #10;
@@ -45,8 +47,15 @@ module tx_tb();
     rst_in = 0;
     #100;
     tx_data = 8'b1010_1011;
+    send_data_btn = 1;
+    #1000;
+    send_data_btn = 0;
     #1000000;
     tx_data = 8'b1010_1010;
+    #1000;
+    send_data_btn = 1;
+    #1000;
+    send_data_btn = 0;
     #1000000;
     $display("Simulation finished");
     $finish;

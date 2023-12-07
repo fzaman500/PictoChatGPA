@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec  7 15:44:48 2023
+| Date         : Thu Dec  7 18:21:32 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing_summary -file obj/post_place_timing_summary.rpt
 | Design       : top_level
@@ -137,7 +137,7 @@ Table of Contents
 
     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
     -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-      5.363        0.000                      0                  342        0.201        0.000                      0                  342        3.500        0.000                       0                   170  
+      5.473        0.000                      0                  347        0.180        0.000                      0                  347        3.500        0.000                       0                   174  
 
 
 All user specified timing constraints are met.
@@ -160,7 +160,7 @@ gclk   {0.000 4.000}      10.000          100.000
 
 Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
 -----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-gclk                5.363        0.000                      0                  342        0.201        0.000                      0                  342        3.500        0.000                       0                   170  
+gclk                5.473        0.000                      0                  347        0.180        0.000                      0                  347        3.500        0.000                       0                   174  
 
 
 ------------------------------------------------------------------------------------------------
@@ -191,26 +191,26 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  gclk
   To Clock:  gclk
 
-Setup :            0  Failing Endpoints,  Worst Slack        5.363ns,  Total Violation        0.000ns
-Hold  :            0  Failing Endpoints,  Worst Slack        0.201ns,  Total Violation        0.000ns
+Setup :            0  Failing Endpoints,  Worst Slack        5.473ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.180ns,  Total Violation        0.000ns
 PW    :            0  Failing Endpoints,  Worst Slack        3.500ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
 
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             5.363ns  (required time - arrival time)
-  Source:                 seven_segment_controller_inst/segment_counter_reg[10]/C
+Slack (MET) :             5.473ns  (required time - arrival time)
+  Source:                 seven_segment_controller_inst/segment_counter_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            seven_segment_controller_inst/segment_counter_reg[0]/R
+  Destination:            seven_segment_controller_inst/segment_counter_reg[4]/R
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        3.947ns  (logic 0.856ns (21.687%)  route 3.091ns (78.313%))
+  Data Path Delay:        3.836ns  (logic 0.856ns (22.315%)  route 2.980ns (77.685%))
   Logic Levels:           3  (LUT4=1 LUT5=2)
-  Clock Path Skew:        -0.024ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.836ns = ( 14.836 - 10.000 ) 
+  Clock Path Skew:        -0.025ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.835ns = ( 14.835 - 10.000 ) 
     Source Clock Delay      (SCD):    5.127ns
     Clock Pessimism Removal (CPR):    0.268ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
@@ -227,18 +227,18 @@ Slack (MET) :             5.363ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, estimated)      1.619     5.127    seven_segment_controller_inst/clk_100mhz_IBUF_BUFG
-    SLICE_X63Y64         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[10]/C
+                         net (fo=173, estimated)      1.619     5.127    seven_segment_controller_inst/CLK
+    SLICE_X63Y63         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[1]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X63Y64         FDRE (Prop_fdre_C_Q)         0.456     5.583 r  seven_segment_controller_inst/segment_counter_reg[10]/Q
-                         net (fo=2, estimated)        0.849     6.432    seven_segment_controller_inst/segment_counter_reg[10]
-    SLICE_X62Y64         LUT4 (Prop_lut4_I0_O)        0.124     6.556 f  seven_segment_controller_inst/segment_state[7]_i_6/O
-                         net (fo=1, estimated)        0.490     7.046    seven_segment_controller_inst/segment_state[7]_i_6_n_0
-    SLICE_X62Y66         LUT5 (Prop_lut5_I4_O)        0.124     7.170 f  seven_segment_controller_inst/segment_state[7]_i_2/O
-                         net (fo=2, estimated)        1.007     8.177    seven_segment_controller_inst/segment_state[7]_i_2_n_0
-    SLICE_X62Y66         LUT5 (Prop_lut5_I4_O)        0.152     8.329 r  seven_segment_controller_inst/segment_counter[0]_i_1/O
-                         net (fo=32, estimated)       0.745     9.074    seven_segment_controller_inst/segment_counter[0]_i_1_n_0
-    SLICE_X63Y62         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[0]/R
+    SLICE_X63Y63         FDRE (Prop_fdre_C_Q)         0.456     5.583 f  seven_segment_controller_inst/segment_counter_reg[1]/Q
+                         net (fo=2, estimated)        0.751     6.334    seven_segment_controller_inst/segment_counter_reg[1]
+    SLICE_X64Y66         LUT4 (Prop_lut4_I1_O)        0.124     6.458 f  seven_segment_controller_inst/segment_state[7]_i_6/O
+                         net (fo=1, estimated)        0.494     6.952    seven_segment_controller_inst/segment_state[7]_i_6_n_0
+    SLICE_X64Y68         LUT5 (Prop_lut5_I4_O)        0.124     7.076 f  seven_segment_controller_inst/segment_state[7]_i_2/O
+                         net (fo=2, estimated)        0.990     8.066    seven_segment_controller_inst/segment_state[7]_i_2_n_0
+    SLICE_X62Y68         LUT5 (Prop_lut5_I4_O)        0.152     8.218 r  seven_segment_controller_inst/segment_counter[0]_i_1/O
+                         net (fo=32, estimated)       0.745     8.963    seven_segment_controller_inst/segment_counter[0]_i_1_n_0
+    SLICE_X63Y64         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[4]/R
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -247,16 +247,16 @@ Slack (MET) :             5.363ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.873    13.244    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.335 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, estimated)      1.501    14.836    seven_segment_controller_inst/clk_100mhz_IBUF_BUFG
-    SLICE_X63Y62         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[0]/C
-                         clock pessimism              0.268    15.103    
-                         clock uncertainty           -0.035    15.068    
-    SLICE_X63Y62         FDRE (Setup_fdre_C_R)       -0.631    14.437    seven_segment_controller_inst/segment_counter_reg[0]
+                         net (fo=173, estimated)      1.500    14.835    seven_segment_controller_inst/CLK
+    SLICE_X63Y64         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[4]/C
+                         clock pessimism              0.268    15.102    
+                         clock uncertainty           -0.035    15.067    
+    SLICE_X63Y64         FDRE (Setup_fdre_C_R)       -0.631    14.436    seven_segment_controller_inst/segment_counter_reg[4]
   -------------------------------------------------------------------
-                         required time                         14.437    
-                         arrival time                          -9.074    
+                         required time                         14.436    
+                         arrival time                          -8.963    
   -------------------------------------------------------------------
-                         slack                                  5.363    
+                         slack                                  5.473    
 
 
 
@@ -264,19 +264,19 @@ Slack (MET) :             5.363ns  (required time - arrival time)
 
 Min Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             0.201ns  (arrival time - required time)
-  Source:                 count_fifo_reg[0]/C
-                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            packet_reg[4]/D
+Slack (MET) :             0.180ns  (arrival time - required time)
+  Source:                 bt_rx_inst/curr_data_reg[0]/C
+                            (rising edge-triggered cell FDSE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            bt_rx_inst/data_out_reg[0]/D
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Hold (Min at Fast Process Corner)
   Requirement:            0.000ns  (gclk rise@0.000ns - gclk rise@0.000ns)
-  Data Path Delay:        0.323ns  (logic 0.189ns (58.583%)  route 0.134ns (41.417%))
-  Logic Levels:           1  (LUT2=1)
-  Clock Path Skew:        0.015ns (DCD - SCD - CPR)
-    Destination Clock Delay (DCD):    2.155ns
-    Source Clock Delay      (SCD):    1.652ns
+  Data Path Delay:        0.269ns  (logic 0.141ns (52.389%)  route 0.128ns (47.611%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.014ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    2.149ns
+    Source Clock Delay      (SCD):    1.647ns
     Clock Pessimism Removal (CPR):    0.488ns
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
@@ -287,14 +287,12 @@ Slack (MET) :             0.201ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.209     0.209 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        0.831     1.040    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.026     1.066 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, estimated)      0.586     1.652    clk_100mhz_IBUF_BUFG
-    SLICE_X59Y62         FDRE                                         r  count_fifo_reg[0]/C
+                         net (fo=173, estimated)      0.581     1.647    bt_rx_inst/CLK
+    SLICE_X58Y69         FDSE                                         r  bt_rx_inst/curr_data_reg[0]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X59Y62         FDRE (Prop_fdre_C_Q)         0.141     1.793 f  count_fifo_reg[0]/Q
-                         net (fo=8, estimated)        0.134     1.926    count_fifo[0]
-    SLICE_X58Y62         LUT2 (Prop_lut2_I0_O)        0.048     1.974 r  packet[4]_i_1/O
-                         net (fo=1, routed)           0.000     1.974    packet[4]_i_1_n_0
-    SLICE_X58Y62         FDRE                                         r  packet_reg[4]/D
+    SLICE_X58Y69         FDSE (Prop_fdse_C_Q)         0.141     1.788 r  bt_rx_inst/curr_data_reg[0]/Q
+                         net (fo=1, estimated)        0.128     1.916    bt_rx_inst/curr_data[0]
+    SLICE_X60Y69         FDRE                                         r  bt_rx_inst/data_out_reg[0]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)       0.000     0.000 r  
@@ -303,15 +301,15 @@ Slack (MET) :             0.201ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.396     0.396 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        0.875     1.271    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.029     1.300 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=169, estimated)      0.855     2.155    clk_100mhz_IBUF_BUFG
-    SLICE_X58Y62         FDRE                                         r  packet_reg[4]/C
-                         clock pessimism             -0.488     1.667    
-    SLICE_X58Y62         FDRE (Hold_fdre_C_D)         0.107     1.774    packet_reg[4]
+                         net (fo=173, estimated)      0.849     2.149    bt_rx_inst/CLK
+    SLICE_X60Y69         FDRE                                         r  bt_rx_inst/data_out_reg[0]/C
+                         clock pessimism             -0.488     1.661    
+    SLICE_X60Y69         FDRE (Hold_fdre_C_D)         0.075     1.736    bt_rx_inst/data_out_reg[0]
   -------------------------------------------------------------------
-                         required time                         -1.774    
-                         arrival time                           1.974    
+                         required time                         -1.736    
+                         arrival time                           1.916    
   -------------------------------------------------------------------
-                         slack                                  0.201    
+                         slack                                  0.180    
 
 
 
@@ -326,8 +324,8 @@ Sources:            { clk_100mhz }
 
 Check Type        Corner  Lib Pin  Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location       Pin
 Min Period        n/a     BUFG/I   n/a            2.155         10.000      7.845      BUFGCTRL_X0Y0  clk_100mhz_IBUF_BUFG_inst/I
-Low Pulse Width   Slow    FDRE/C   n/a            0.500         6.000       5.500      SLICE_X59Y62   count_fifo_reg[0]/C
-High Pulse Width  Slow    FDRE/C   n/a            0.500         4.000       3.500      SLICE_X59Y62   count_fifo_reg[0]/C
+Low Pulse Width   Slow    FDRE/C   n/a            0.500         6.000       5.500      SLICE_X59Y66   count_fifo_reg[0]/C
+High Pulse Width  Slow    FDRE/C   n/a            0.500         4.000       3.500      SLICE_X59Y66   count_fifo_reg[0]/C
 
 
 
