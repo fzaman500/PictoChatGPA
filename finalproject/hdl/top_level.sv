@@ -5,24 +5,69 @@ module top_level(
   input wire clk_100mhz,
   input wire [3:0] btn, //all four momentary button switches
   input wire ble_uart_tx,
+  inout wire sda,
+  output logic [7:0] pmoda, //output I/O used for SPI TX (in part 3)
+  input wire [6:0] pmodb, //input I/O used for SPI RX (in part 3)
   input wire [15:0] sw, 
   input wire ble_uart_rts, //flipped, if computer ready request to send
   output logic ble_uart_cts, //flipped, if ready to give data from fpga, clear to send
   output logic ble_uart_rx,
-  output logic [2:0] rgb0, //rgb led
-  output logic [2:0] rgb1, //rgb led
   output logic [3:0] ss0_an,//anode control for upper four digits of seven-seg display
   output logic [3:0] ss1_an,//anode control for lower four digits of seven-seg display
   output logic [6:0] ss0_c, //cathode controls for the segments of upper four digits
-  output logic [6:0] ss1_c //cathod controls for the segments of lower four digits
+  output logic [6:0] ss1_c, //cathod controls for the segments of lower four digits
+  output logic [2:0] rgb0, //rgb led
+  output logic [2:0] rgb1 //rgb led
   );
 
-logic [6:0] ss_c; //used to grab output cathode signal for 7s leds
-assign ss0_c = ss_c; //control upper four digit's cathodes!
-assign ss1_c = ss_c; //same as above but for lower four digits!
+//BUTTON CLEANING
+logic btn0_clean_old;
+logic btn0_clean;
+debouncer btn0_db(
+  .clk_in(clk_100mhz),                
+  .rst_in(sys_rst),
+  .dirty_in(btn[0]),
+  .clean_out(btn0_clean));
+
+logic btn1_clean_old;
+logic btn1_clean;
+debouncer btn1_db(.clk_in(clk_100mhz),
+                .rst_in(sys_rst),
+                .dirty_in(btn[1]),
+                .clean_out(btn1_clean));
+                
+logic btn2_clean_old;
+logic btn2_clean;
+debouncer btn2_db(.clk_in(clk_100mhz),
+                .rst_in(sys_rst),
+                .dirty_in(btn[2]),
+                .clean_out(btn2_clean));
+                
+logic btn3_clean_old;
+logic btn3_clean;
+debouncer btn3_db(.clk_in(clk_100mhz),
+                .rst_in(sys_rst),
+                .dirty_in(btn[3]),
+                .clean_out(btn3_clean));
+
+logic btn0;
+logic btn1;
+logic btn2;
+logic btn3;
+
+assign btn0 = btn0_clean && !btn0_clean_old;
+assign btn1 = btn1_clean && !btn1_clean_old;
+assign btn2 = btn2_clean && !btn2_clean_old;
+assign btn3 = btn3_clean && !btn3_clean_old;
+
+always_ff @(posedge clk_100mhz) begin
+  btn0_clean_old <= btn0_clean;
+  btn1_clean_old <= btn1_clean;
+  btn2_clean_old <= btn2_clean;
+end
 
 logic sys_rst;
-assign sys_rst = btn[0];
+assign sys_rst = btn0;
 
 /*
 //I2C Module
@@ -40,43 +85,18 @@ process_touch process_touch_inst (
   .active_draw(ad)
 );
 */
-//Setting bluetooth clock
-//logic bluetooth_clk_int;
-/*baud_clk baud_inst (
-  .clk(clk_100mhz),
-  .enable(1),
-  .rst_in(sys_rst),
-  .tick(bluetooth_clk)
-);*/
-
-/*clk_wiz_0 clk_115 (
-  .reset(sys_rst),
-  .clk_in1(clk_100mhz),
-  .clk_out1(bluetooth_clk_int),
-  .locked()
-);
 
 
-baud_wiz baud_gen (
-  .rst_in(sys_rst),
-  .clk_in(bluetooth_clk_int),
-  .clk_out(bluetooth_clk_real)
-);*/
 
+
+
+//ALL OF THE BLUETOOTH
 logic clean_ble_uart_tx;
 synchronizer synchronizer_inst (
   .clk_in(clk_100mhz),
   .rst_in(sys_rst),
   .us_in(ble_uart_tx),
   .s_out(clean_ble_uart_tx)
-);
-
-logic clean_btn1;
-debouncer debouncer_inst (
-  .clk_in(clk_100mhz),
-  .rst_in(sys_rst),
-  .dirty_in(btn[1]),
-  .clean_out(clean_btn1)
 );
 
 logic bluetooth_clk_real;
@@ -88,54 +108,25 @@ baud_wiz_off_100 baud_clk_gen (
 
 //Transmitting
 logic [7:0] packet;
-
-/*
-logic [3:0] sending_fifo [7:0]; //this is 4 arrays of size 8 each right
-logic [1:0] count_fifo;
-always_ff @(posedge clk_100mhz) begin
-  if (rst_in) begin
-    packet <= 8'b0000_1010;
-    count_fifo <= 0;
-    sending_fifo[0] <= y;
-    sending_fifo[1] <= x[7:0];
-    sending_fifo[2] <= {x[8], color, 4'b0000};
-    sending_fifo[3] <= 8'b0000_1010;
-  end else if (rts) begin
-    if (tx_finished) begin
-      count_fifo <= count_fifo + 1;
-      if (count_fifo ==  3) begin
-        sending_fifo[0] <= y;
-        sending_fifo[1] <= x[7:0];
-        sending_fifo[2] <= {x[8], color, 4'b0000};
-        sending_fifo[3] <= 8'b0000_1010;
-      end
-    end
-    packet <= sending_fifo[count_fifo];
-  end
-end
-*/
-
-logic [7:0] sending_fifo [3:0]; //this is 2 arrays of size 8 each right
+logic [7:0] sending_fifo [2:0]; //this is 3 arrays of size 8 each right
 logic [2:0] count_fifo;
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     packet <= 8'b0000_0000;
     //tx_finished <= 0;
     count_fifo <= 0;
-    sending_fifo[0] <= 8'h42;
-    sending_fifo[1] <= 8'h61;
-    sending_fifo[2] <= 8'h67;
+    sending_fifo[1] <= draw_col1;//8'h61;//
+    sending_fifo[2] <= draw_row1[7:0];//8'h67;
     sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     if (tx_finished) begin
-      if (count_fifo == 3) begin
+      if (count_fifo == 2) begin
         count_fifo <= 0;
       end else begin
         count_fifo <= count_fifo + 1;
       end
-      sending_fifo[0] <= 8'h42;
-      sending_fifo[1] <= 8'h61;
-      sending_fifo[2] <= 8'h67;
+      sending_fifo[1] <= draw_col1;//8'h61;//
+      sending_fifo[2] <= draw_row1[7:0];//8'h67;
       sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     packet <= sending_fifo[count_fifo];
@@ -143,8 +134,12 @@ always_ff @(posedge clk_100mhz) begin
   end
 end
 
-logic [31:0] display_val;
+//the number display
+logic [6:0] ss_c; //used to grab output cathode signal for 7s leds
+assign ss0_c = ss_c; //control upper four digit's cathodes!
+assign ss1_c = ss_c; //same as above but for lower four digits!
 
+logic [31:0] display_val;
 seven_segment_controller seven_segment_controller_inst (
   .clk_in(clk_100mhz),
   .rst_in(sys_rst),
@@ -161,7 +156,7 @@ bluetooth_tx bt_tx_inst (
   .baud_clk(bluetooth_clk_real),
   .tx_data(packet), //.tx_data(packet)
   .rst_in(sys_rst),
-  .send_data_btn(clean_btn1), //computer ready request to send
+  .send_data_btn(btn1), //computer ready request to send
   .tx(ble_uart_rx), //flipped according to inst
   .finished_sending(tx_finished),
   .busy_out(busy_tx)
@@ -184,6 +179,67 @@ always_ff @(posedge clk_100mhz) begin
   end else if (finished_receiving) begin
     display_val <= {display_val[23:0], data_out};
   end 
+end
+
+
+
+
+
+//SPI DISPLAY STUFF
+logic [7:0] draw_col1;
+logic [7:0] draw_col2;
+logic [8:0] draw_row1;
+logic [8:0] draw_row2;
+logic [2:0] draw_color;
+logic valid_draw_data;
+logic [4:0] state;
+
+logic [7:0] real_draw_col1;
+logic [8:0] real_draw_row1;
+logic [7:0] col_fifo [1:0];
+logic [8:0] row_fifo [1:0];
+always_ff @(posedge clk_100mhz) begin
+
+end
+  
+display screen
+( .clk_in(clk_100mhz),
+  .rst_in(sys_rst),
+  .custom_in(btn3),
+  
+  .col1_in(draw_col1),
+  .col2_in(draw_col2),
+  .row1_in(draw_row1),
+  .row2_in(draw_row2),
+  .color_in(draw_color),
+  .valid_in(valid_draw_data),
+  
+  .tft_sdo(), // input
+  .tft_sck(pmoda[0]),
+  .tft_sdi(pmoda[1]),
+  .tft_dc(pmoda[3]),
+  .tft_reset(pmoda[4]),
+  .tft_cs(pmoda[2]),
+  
+  .sw(sw),
+  .state_out(state)
+);
+
+// TESTING CODE
+ 
+always_ff @(posedge clk_100mhz) begin
+  
+  if (btn2) begin
+    draw_col1 <= sw[15:9];
+    draw_col2 <= sw[15:9];
+    draw_row1 <= sw[8:0];
+    draw_row2 <= sw[8:0];
+    draw_color <= 0;
+    valid_draw_data <= 1;
+  end
+  else begin
+    valid_draw_data <= 0;
+  end
 end
 
 endmodule // top_level

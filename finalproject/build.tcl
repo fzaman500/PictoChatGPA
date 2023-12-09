@@ -28,9 +28,9 @@ read_xdc ./xdc/top_level.xdc
 set_part $partNum
 
 # Read in all IP
-read_ip ./ip/clk_wiz_0/clk_wiz_0.xci
-generate_target all [get_ips]
-synth_ip [get_ips]
+#read_ip ./ip/clk_wiz_0/clk_wiz_0.xci
+#generate_target all [get_ips]
+#synth_ip [get_ips]
 
 #Run Synthesis
 synth_design -top top_level -part $partNum -verbose

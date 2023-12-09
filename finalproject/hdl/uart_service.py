@@ -60,6 +60,8 @@ async def uart_terminal():
 
     def handle_rx(_: BleakGATTCharacteristic, data: bytearray):
         print("received:", data)
+        #print(data.decode("all-escapes"))
+
 
     async with BleakClient(device, disconnected_callback=handle_disconnect) as client:
         await client.start_notify(UART_TX_CHAR_UUID, handle_rx)
@@ -94,6 +96,7 @@ async def uart_terminal():
             for s in sliced(data, rx_char.max_write_without_response_size):
                 await client.write_gatt_char(rx_char, s, response=False)
 
+            print("type", type(data))
             print("sent:", data)
 
 

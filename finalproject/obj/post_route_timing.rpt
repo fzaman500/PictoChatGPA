@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec  7 18:21:40 2023
+| Date         : Sat Dec  9 21:08:45 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_route_timing.rpt
 | Design       : top_level
@@ -12,19 +12,19 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             5.644ns  (required time - arrival time)
-  Source:                 seven_segment_controller_inst/segment_counter_reg[1]/C
-                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            seven_segment_controller_inst/segment_counter_reg[4]/R
+Slack (MET) :             3.949ns  (required time - arrival time)
+  Source:                 screen/delay_reg[6]/C
+                            (rising edge-triggered cell FDSE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            screen/delay_reg[29]/D
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        3.665ns  (logic 0.856ns (23.358%)  route 2.809ns (76.642%))
-  Logic Levels:           3  (LUT4=1 LUT5=2)
-  Clock Path Skew:        -0.025ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.833ns = ( 14.833 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.129ns
+  Data Path Delay:        6.097ns  (logic 2.702ns (44.317%)  route 3.395ns (55.683%))
+  Logic Levels:           11  (CARRY4=7 LUT2=1 LUT4=2 LUT5=1)
+  Clock Path Skew:        -0.028ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.834ns = ( 14.834 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.133ns
     Clock Pessimism Removal (CPR):    0.271ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
@@ -40,18 +40,41 @@ Slack (MET) :             5.644ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, routed)           1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, routed)         1.621     5.129    seven_segment_controller_inst/CLK
-    SLICE_X63Y63         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[1]/C
+                         net (fo=387, routed)         1.625     5.133    screen/clk
+    SLICE_X60Y55         FDSE                                         r  screen/delay_reg[6]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X63Y63         FDRE (Prop_fdre_C_Q)         0.456     5.585 f  seven_segment_controller_inst/segment_counter_reg[1]/Q
-                         net (fo=2, routed)           0.751     6.336    seven_segment_controller_inst/segment_counter_reg[1]
-    SLICE_X64Y66         LUT4 (Prop_lut4_I1_O)        0.124     6.460 f  seven_segment_controller_inst/segment_state[7]_i_6/O
-                         net (fo=1, routed)           0.514     6.973    seven_segment_controller_inst/segment_state[7]_i_6_n_0
-    SLICE_X64Y68         LUT5 (Prop_lut5_I4_O)        0.124     7.097 f  seven_segment_controller_inst/segment_state[7]_i_2/O
-                         net (fo=2, routed)           0.807     7.905    seven_segment_controller_inst/segment_state[7]_i_2_n_0
-    SLICE_X62Y68         LUT5 (Prop_lut5_I4_O)        0.152     8.057 r  seven_segment_controller_inst/segment_counter[0]_i_1/O
-                         net (fo=32, routed)          0.737     8.794    seven_segment_controller_inst/segment_counter[0]_i_1_n_0
-    SLICE_X63Y64         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[4]/R
+    SLICE_X60Y55         FDSE (Prop_fdse_C_Q)         0.518     5.651 r  screen/delay_reg[6]/Q
+                         net (fo=2, routed)           0.813     6.463    screen/delay_reg[6]
+    SLICE_X61Y57         LUT4 (Prop_lut4_I0_O)        0.124     6.587 r  screen/FSM_sequential_state[2]_i_13/O
+                         net (fo=2, routed)           0.815     7.402    screen/FSM_sequential_state[2]_i_13_n_0
+    SLICE_X61Y56         LUT5 (Prop_lut5_I4_O)        0.152     7.554 r  screen/custom_data_index[5]_i_8/O
+                         net (fo=2, routed)           0.556     8.111    screen/custom_data_index[5]_i_8_n_0
+    SLICE_X59Y57         LUT4 (Prop_lut4_I2_O)        0.326     8.437 f  screen/col1[6]_i_2/O
+                         net (fo=65, routed)          0.652     9.089    screen/spi/trigger_in_reg_2
+    SLICE_X59Y56         LUT2 (Prop_lut2_I1_O)        0.124     9.213 r  screen/spi/delay[0]_i_5/O
+                         net (fo=6, routed)           0.559     9.772    screen/spi/tft_reset1
+    SLICE_X60Y55         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.550    10.322 r  screen/spi/delay_reg[4]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.322    screen/spi/delay_reg[4]_i_1_n_0
+    SLICE_X60Y56         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.439 r  screen/spi/delay_reg[8]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.439    screen/spi/delay_reg[8]_i_1_n_0
+    SLICE_X60Y57         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.556 r  screen/spi/delay_reg[12]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.556    screen/spi/delay_reg[12]_i_1_n_0
+    SLICE_X60Y58         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.673 r  screen/spi/delay_reg[16]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.673    screen/spi/delay_reg[16]_i_1_n_0
+    SLICE_X60Y59         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.790 r  screen/spi/delay_reg[20]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.790    screen/spi/delay_reg[20]_i_1_n_0
+    SLICE_X60Y60         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.907 r  screen/spi/delay_reg[24]_i_1/CO[3]
+                         net (fo=1, routed)           0.000    10.907    screen/spi/delay_reg[24]_i_1_n_0
+    SLICE_X60Y61         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323    11.230 r  screen/spi/delay_reg[28]_i_1/O[1]
+                         net (fo=1, routed)           0.000    11.230    screen/spi_n_33
+    SLICE_X60Y61         FDRE                                         r  screen/delay_reg[29]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -60,16 +83,16 @@ Slack (MET) :             5.644ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, routed)           1.868    13.238    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.329 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, routed)         1.504    14.833    seven_segment_controller_inst/CLK
-    SLICE_X63Y64         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[4]/C
-                         clock pessimism              0.271    15.104    
-                         clock uncertainty           -0.035    15.068    
-    SLICE_X63Y64         FDRE (Setup_fdre_C_R)       -0.631    14.437    seven_segment_controller_inst/segment_counter_reg[4]
+                         net (fo=387, routed)         1.505    14.834    screen/clk
+    SLICE_X60Y61         FDRE                                         r  screen/delay_reg[29]/C
+                         clock pessimism              0.271    15.105    
+                         clock uncertainty           -0.035    15.069    
+    SLICE_X60Y61         FDRE (Setup_fdre_C_D)        0.109    15.178    screen/delay_reg[29]
   -------------------------------------------------------------------
-                         required time                         14.437    
-                         arrival time                          -8.794    
+                         required time                         15.178    
+                         arrival time                         -11.230    
   -------------------------------------------------------------------
-                         slack                                  5.644    
+                         slack                                  3.949    
 
 
 

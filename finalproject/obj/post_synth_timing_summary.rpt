@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec  7 18:21:27 2023
+| Date         : Sat Dec  9 21:08:33 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing_summary -file obj/post_synth_timing_summary.rpt
 | Design       : top_level
@@ -52,8 +52,8 @@ Table of Contents
 2. checking constant_clock (0)
 3. checking pulse_width_clock (0)
 4. checking unconstrained_internal_endpoints (0)
-5. checking no_input_delay (3)
-6. checking no_output_delay (23)
+5. checking no_input_delay (21)
+6. checking no_output_delay (28)
 7. checking multiple_clock (0)
 8. checking generated_clocks (0)
 9. checking loops (0)
@@ -83,16 +83,16 @@ Table of Contents
  There are 0 pins that are not constrained for maximum delay due to constant clock.
 
 
-5. checking no_input_delay (3)
-------------------------------
- There are 3 input ports with no input delay specified. (HIGH)
+5. checking no_input_delay (21)
+-------------------------------
+ There are 21 input ports with no input delay specified. (HIGH)
 
  There are 0 input ports with no input delay but user has a false path constraint.
 
 
-6. checking no_output_delay (23)
+6. checking no_output_delay (28)
 --------------------------------
- There are 23 ports with no output delay specified. (HIGH)
+ There are 28 ports with no output delay specified. (HIGH)
 
  There are 0 ports with no output delay but user has a false path constraint
 
@@ -137,7 +137,7 @@ Table of Contents
 
     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
     -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-      5.427        0.000                      0                  347        0.134        0.000                      0                  347        3.500        0.000                       0                   174  
+      4.004        0.000                      0                  885        0.134        0.000                      0                  885        3.500        0.000                       0                   388  
 
 
 All user specified timing constraints are met.
@@ -160,7 +160,7 @@ gclk   {0.000 4.000}      10.000          100.000
 
 Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
 -----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-gclk                5.427        0.000                      0                  347        0.134        0.000                      0                  347        3.500        0.000                       0                   174  
+gclk                4.004        0.000                      0                  885        0.134        0.000                      0                  885        3.500        0.000                       0                   388  
 
 
 ------------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  gclk
   To Clock:  gclk
 
-Setup :            0  Failing Endpoints,  Worst Slack        5.427ns,  Total Violation        0.000ns
+Setup :            0  Failing Endpoints,  Worst Slack        4.004ns,  Total Violation        0.000ns
 Hold  :            0  Failing Endpoints,  Worst Slack        0.134ns,  Total Violation        0.000ns
 PW    :            0  Failing Endpoints,  Worst Slack        3.500ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
@@ -199,16 +199,16 @@ PW    :            0  Failing Endpoints,  Worst Slack        3.500ns,  Total Vio
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             5.427ns  (required time - arrival time)
-  Source:                 seven_segment_controller_inst/segment_counter_reg[6]/C
+Slack (MET) :             4.004ns  (required time - arrival time)
+  Source:                 screen/delay_reg[9]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            seven_segment_controller_inst/segment_counter_reg[0]/R
+  Destination:            screen/delay_reg[29]/D
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        3.960ns  (logic 0.999ns (25.227%)  route 2.961ns (74.773%))
-  Logic Levels:           3  (LUT4=1 LUT5=2)
+  Data Path Delay:        5.878ns  (logic 2.548ns (43.348%)  route 3.330ns (56.652%))
+  Logic Levels:           11  (CARRY4=7 LUT2=1 LUT4=2 LUT5=1)
   Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
     Destination Clock Delay (DCD):    2.660ns = ( 12.660 - 10.000 ) 
     Source Clock Delay      (SCD):    2.920ns
@@ -227,18 +227,41 @@ Slack (MET) :             5.427ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.800     2.240    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.096     2.336 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, unplaced)       0.584     2.920    seven_segment_controller_inst/CLK
-                         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[6]/C
+                         net (fo=387, unplaced)       0.584     2.920    screen/clk
+                         FDRE                                         r  screen/delay_reg[9]/C
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.456     3.376 f  seven_segment_controller_inst/segment_counter_reg[6]/Q
-                         net (fo=2, unplaced)         0.752     4.128    seven_segment_controller_inst/segment_counter_reg[6]
-                         LUT4 (Prop_lut4_I1_O)        0.295     4.423 f  seven_segment_controller_inst/segment_state[7]_i_8/O
-                         net (fo=1, unplaced)         0.449     4.872    seven_segment_controller_inst/segment_state[7]_i_8_n_0
-                         LUT5 (Prop_lut5_I4_O)        0.124     4.996 f  seven_segment_controller_inst/segment_state[7]_i_4/O
-                         net (fo=2, unplaced)         0.913     5.909    seven_segment_controller_inst/segment_state[7]_i_4_n_0
-                         LUT5 (Prop_lut5_I2_O)        0.124     6.033 r  seven_segment_controller_inst/segment_counter[0]_i_1/O
-                         net (fo=32, unplaced)        0.847     6.880    seven_segment_controller_inst/segment_counter[0]_i_1_n_0
-                         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[0]/R
+                         FDRE (Prop_fdre_C_Q)         0.456     3.376 r  screen/delay_reg[9]/Q
+                         net (fo=2, unplaced)         0.752     4.128    screen/delay_reg[9]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.423 r  screen/FSM_sequential_state[2]_i_10/O
+                         net (fo=1, unplaced)         0.449     4.872    screen/FSM_sequential_state[2]_i_10_n_0
+                         LUT5 (Prop_lut5_I4_O)        0.124     4.996 f  screen/FSM_sequential_state[2]_i_5/O
+                         net (fo=3, unplaced)         0.920     5.916    screen/FSM_sequential_state[2]_i_5_n_0
+                         LUT4 (Prop_lut4_I1_O)        0.124     6.040 f  screen/col1[6]_i_2/O
+                         net (fo=65, unplaced)        0.538     6.578    screen/spi/trigger_in_reg_2
+                         LUT2 (Prop_lut2_I1_O)        0.124     6.702 r  screen/spi/delay[0]_i_5/O
+                         net (fo=6, unplaced)         0.671     7.373    screen/spi/tft_reset1
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507     7.880 r  screen/spi/delay_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     7.880    screen/spi/delay_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     7.994 r  screen/spi/delay_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     7.994    screen/spi/delay_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     8.108 r  screen/spi/delay_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.108    screen/spi/delay_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     8.222 r  screen/spi/delay_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.222    screen/spi/delay_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     8.336 r  screen/spi/delay_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.336    screen/spi/delay_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     8.450 r  screen/spi/delay_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.450    screen/spi/delay_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.348     8.798 r  screen/spi/delay_reg[28]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000     8.798    screen/spi_n_33
+                         FDRE                                         r  screen/delay_reg[29]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -247,16 +270,16 @@ Slack (MET) :             5.427ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.760    12.130    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.091    12.221 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, unplaced)       0.439    12.660    seven_segment_controller_inst/CLK
-                         FDRE                                         r  seven_segment_controller_inst/segment_counter_reg[0]/C
+                         net (fo=387, unplaced)       0.439    12.660    screen/clk
+                         FDRE                                         r  screen/delay_reg[29]/C
                          clock pessimism              0.115    12.775    
                          clock uncertainty           -0.035    12.740    
-                         FDRE (Setup_fdre_C_R)       -0.433    12.307    seven_segment_controller_inst/segment_counter_reg[0]
+                         FDRE (Setup_fdre_C_D)        0.062    12.802    screen/delay_reg[29]
   -------------------------------------------------------------------
-                         required time                         12.307    
-                         arrival time                          -6.880    
+                         required time                         12.802    
+                         arrival time                          -8.798    
   -------------------------------------------------------------------
-                         slack                                  5.427    
+                         slack                                  4.004    
 
 
 
@@ -265,15 +288,15 @@ Slack (MET) :             5.427ns  (required time - arrival time)
 Min Delay Paths
 --------------------------------------------------------------------------------------
 Slack (MET) :             0.134ns  (arrival time - required time)
-  Source:                 synchronizer_inst/sync_reg[1]/C
+  Source:                 sending_fifo_reg[2][0]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            synchronizer_inst/sync_reg[0]/D
+  Destination:            packet_reg[0]/D
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Hold (Min at Fast Process Corner)
   Requirement:            0.000ns  (gclk rise@0.000ns - gclk rise@0.000ns)
   Data Path Delay:        0.370ns  (logic 0.239ns (64.578%)  route 0.131ns (35.422%))
-  Logic Levels:           1  (LUT3=1)
+  Logic Levels:           1  (LUT4=1)
   Clock Path Skew:        0.145ns (DCD - SCD - CPR)
     Destination Clock Delay (DCD):    1.039ns
     Source Clock Delay      (SCD):    0.686ns
@@ -287,14 +310,14 @@ Slack (MET) :             0.134ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.209     0.209 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.337     0.546    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.026     0.572 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, unplaced)       0.114     0.686    synchronizer_inst/CLK
-                         FDRE                                         r  synchronizer_inst/sync_reg[1]/C
+                         net (fo=387, unplaced)       0.114     0.686    clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  sending_fifo_reg[2][0]/C
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.141     0.827 r  synchronizer_inst/sync_reg[1]/Q
-                         net (fo=1, unplaced)         0.131     0.958    synchronizer_inst/p_0_in
-                         LUT3 (Prop_lut3_I2_O)        0.098     1.056 r  synchronizer_inst/sync[0]_i_1/O
-                         net (fo=1, unplaced)         0.000     1.056    synchronizer_inst/sync[0]_i_1_n_0
-                         FDRE                                         r  synchronizer_inst/sync_reg[0]/D
+                         FDRE (Prop_fdre_C_Q)         0.141     0.827 r  sending_fifo_reg[2][0]/Q
+                         net (fo=1, unplaced)         0.131     0.958    sending_fifo_reg[2][0]
+                         LUT4 (Prop_lut4_I3_O)        0.098     1.056 r  packet[0]_i_1/O
+                         net (fo=1, unplaced)         0.000     1.056    packet[0]_i_1_n_0
+                         FDRE                                         r  packet_reg[0]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)       0.000     0.000 r  
@@ -303,10 +326,10 @@ Slack (MET) :             0.134ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.396     0.396 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.355     0.751    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.029     0.780 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=173, unplaced)       0.259     1.039    synchronizer_inst/CLK
-                         FDRE                                         r  synchronizer_inst/sync_reg[0]/C
+                         net (fo=387, unplaced)       0.259     1.039    clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  packet_reg[0]/C
                          clock pessimism             -0.208     0.831    
-                         FDRE (Hold_fdre_C_D)         0.091     0.922    synchronizer_inst/sync_reg[0]
+                         FDRE (Hold_fdre_C_D)         0.091     0.922    packet_reg[0]
   -------------------------------------------------------------------
                          required time                         -0.922    
                          arrival time                           1.056    
@@ -324,10 +347,10 @@ Waveform(ns):       { 0.000 4.000 }
 Period(ns):         10.000
 Sources:            { clk_100mhz }
 
-Check Type        Corner  Lib Pin  Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
-Min Period        n/a     BUFG/I   n/a            2.155         10.000      7.845                clk_100mhz_IBUF_BUFG_inst/I
-Low Pulse Width   Slow    FDRE/C   n/a            0.500         6.000       5.500                count_fifo_reg[0]/C
-High Pulse Width  Slow    FDRE/C   n/a            0.500         4.000       3.500                count_fifo_reg[0]/C
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
+Min Period        n/a     RAMB18E1/CLKARDCLK  n/a            2.576         10.000      7.424                screen/init_data_index_reg_rep/CLKARDCLK
+Low Pulse Width   Slow    FDRE/C              n/a            0.500         6.000       5.500                btn0_clean_old_reg/C
+High Pulse Width  Slow    FDRE/C              n/a            0.500         4.000       3.500                btn0_clean_old_reg/C
 
 
 
