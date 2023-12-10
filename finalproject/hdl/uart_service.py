@@ -60,7 +60,7 @@ async def uart_terminal():
             task.cancel()
 
     def handle_rx(_: BleakGATTCharacteristic, data: bytearray):
-        print("received:", data)
+        #print("received:", data)
         ret = binascii.hexlify(data)
         print("received:", ret)
 

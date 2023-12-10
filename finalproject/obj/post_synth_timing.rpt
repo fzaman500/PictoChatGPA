@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Sun Dec 10 03:31:17 2023
+| Date         : Sun Dec 10 20:08:37 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_synth_timing.rpt
 | Design       : top_level
@@ -12,15 +12,15 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             4.007ns  (required time - arrival time)
-  Source:                 screen/delay_reg[21]/C
+Slack (MET) :             4.005ns  (required time - arrival time)
+  Source:                 screen/delay_reg[4]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Destination:            screen/delay_reg[29]/D
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        5.875ns  (logic 2.542ns (43.268%)  route 3.333ns (56.732%))
+  Data Path Delay:        5.877ns  (logic 2.548ns (43.355%)  route 3.329ns (56.645%))
   Logic Levels:           11  (CARRY4=7 LUT2=1 LUT4=2 LUT5=1)
   Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
     Destination Clock Delay (DCD):    2.660ns = ( 12.660 - 10.000 ) 
@@ -40,40 +40,40 @@ Slack (MET) :             4.007ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.800     2.240    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.096     2.336 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=439, unplaced)       0.584     2.920    screen/clk
-                         FDRE                                         r  screen/delay_reg[21]/C
+                         net (fo=475, unplaced)       0.584     2.920    screen/clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  screen/delay_reg[4]/C
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.456     3.376 r  screen/delay_reg[21]/Q
-                         net (fo=2, unplaced)         0.752     4.128    screen/delay_reg[21]
-                         LUT4 (Prop_lut4_I1_O)        0.295     4.423 r  screen/FSM_sequential_state[2]_i_13/O
-                         net (fo=2, unplaced)         0.460     4.883    screen/FSM_sequential_state[2]_i_13_n_0
-                         LUT5 (Prop_lut5_I4_O)        0.118     5.001 f  screen/FSM_sequential_state[2]_i_9/O
-                         net (fo=2, unplaced)         0.913     5.914    screen/FSM_sequential_state[2]_i_9_n_0
-                         LUT4 (Prop_lut4_I1_O)        0.124     6.038 f  screen/draw_seq_index[4]_i_5/O
-                         net (fo=64, unplaced)        0.537     6.575    screen/spi/drawn_finished_reg
-                         LUT2 (Prop_lut2_I1_O)        0.124     6.699 r  screen/spi/delay[0]_i_5/O
-                         net (fo=6, unplaced)         0.671     7.370    screen/spi/tft_reset1
+                         FDRE (Prop_fdre_C_Q)         0.456     3.376 r  screen/delay_reg[4]/Q
+                         net (fo=2, unplaced)         0.752     4.128    screen/delay_reg[4]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.423 r  screen/FSM_sequential_state[2]_i_15/O
+                         net (fo=1, unplaced)         0.449     4.872    screen/FSM_sequential_state[2]_i_15_n_0
+                         LUT5 (Prop_lut5_I4_O)        0.124     4.996 f  screen/FSM_sequential_state[2]_i_8/O
+                         net (fo=3, unplaced)         0.920     5.916    screen/FSM_sequential_state[2]_i_8_n_0
+                         LUT4 (Prop_lut4_I1_O)        0.124     6.040 f  screen/data_in[8]_i_4/O
+                         net (fo=62, unplaced)        0.537     6.577    screen/spi/trigger_in_reg_0
+                         LUT2 (Prop_lut2_I1_O)        0.124     6.701 r  screen/spi/delay[0]_i_5/O
+                         net (fo=6, unplaced)         0.671     7.372    screen/spi/tft_reset1
                          CARRY4 (Prop_carry4_DI[1]_CO[3])
-                                                      0.507     7.877 r  screen/spi/delay_reg[4]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     7.877    screen/spi/delay_reg[4]_i_1_n_0
+                                                      0.507     7.879 r  screen/spi/delay_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     7.879    screen/spi/delay_reg[4]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.991 r  screen/spi/delay_reg[8]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     7.991    screen/spi/delay_reg[8]_i_1_n_0
+                                                      0.114     7.993 r  screen/spi/delay_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     7.993    screen/spi/delay_reg[8]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.105 r  screen/spi/delay_reg[12]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     8.105    screen/spi/delay_reg[12]_i_1_n_0
+                                                      0.114     8.107 r  screen/spi/delay_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.107    screen/spi/delay_reg[12]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.219 r  screen/spi/delay_reg[16]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     8.219    screen/spi/delay_reg[16]_i_1_n_0
+                                                      0.114     8.221 r  screen/spi/delay_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.221    screen/spi/delay_reg[16]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.333 r  screen/spi/delay_reg[20]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     8.333    screen/spi/delay_reg[20]_i_1_n_0
+                                                      0.114     8.335 r  screen/spi/delay_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.335    screen/spi/delay_reg[20]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     8.447 r  screen/spi/delay_reg[24]_i_1/CO[3]
-                         net (fo=1, unplaced)         0.000     8.447    screen/spi/delay_reg[24]_i_1_n_0
+                                                      0.114     8.449 r  screen/spi/delay_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000     8.449    screen/spi/delay_reg[24]_i_1_n_0
                          CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.348     8.795 r  screen/spi/delay_reg[28]_i_1/O[1]
-                         net (fo=1, unplaced)         0.000     8.795    screen/spi_n_33
+                                                      0.348     8.797 r  screen/spi/delay_reg[28]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000     8.797    screen/spi_n_33
                          FDRE                                         r  screen/delay_reg[29]/D
   -------------------------------------------------------------------    -------------------
 
@@ -83,16 +83,16 @@ Slack (MET) :             4.007ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.760    12.130    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.091    12.221 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=439, unplaced)       0.439    12.660    screen/clk
+                         net (fo=475, unplaced)       0.439    12.660    screen/clk_100mhz_IBUF_BUFG
                          FDRE                                         r  screen/delay_reg[29]/C
                          clock pessimism              0.115    12.775    
                          clock uncertainty           -0.035    12.740    
                          FDRE (Setup_fdre_C_D)        0.062    12.802    screen/delay_reg[29]
   -------------------------------------------------------------------
                          required time                         12.802    
-                         arrival time                          -8.795    
+                         arrival time                          -8.797    
   -------------------------------------------------------------------
-                         slack                                  4.007    
+                         slack                                  4.005    
 
 
 

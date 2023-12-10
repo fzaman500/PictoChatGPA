@@ -108,28 +108,34 @@ baud_wiz_off_100 baud_clk_gen (
 
 //Transmitting
 logic [7:0] packet;
-logic [7:0] sending_fifo [2:0]; //this is 3 arrays of size 8 each right
+logic [7:0] sending_fifo [3:0]; //this is 3 arrays of size 8 each right
 logic [2:0] count_fifo;
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     packet <= 8'b0000_0000;
     //tx_finished <= 0;
     count_fifo <= 0;
-    sending_fifo[0] <= draw_col1;//8'h61;//
-    sending_fifo[1] <= draw_row1[7:0];//8'h67;
-    sending_fifo[2] <= 8'h0A; //from 0A
+    sending_fifo[0] <= curr_color_own;
+    sending_fifo[1] <= draw_col1;//8'h61;//
+    sending_fifo[2] <= draw_row1[7:0];//8'h67;
+    sending_fifo[3] <= 8'h0A; //from 0A
   end else begin
     if (tx_finished) begin
-      if (count_fifo == 2) begin
+      if (count_fifo == 3) begin
         count_fifo <= 0;
       end else begin
         count_fifo <= count_fifo + 1;
       end
-      sending_fifo[0] <= draw_col1;//draw_col1;//8'h61;//
-      sending_fifo[1] <= draw_row1[7:0];//draw_row1[7:0];//8'h67;
-      sending_fifo[2] <= 8'h0A; //from 0A
+      sending_fifo[0] <= curr_color_own;//curr_color_own;
+      sending_fifo[1] <= draw_col1;//8'h61;//
+      sending_fifo[2] <= draw_row1[7:0];//8'h67;
+      sending_fifo[3] <= 8'h0A; //from 0A
     end else begin
       packet <= sending_fifo[count_fifo];
+      sending_fifo[0] <= curr_color_own;//curr_color_own;
+      sending_fifo[1] <= draw_col1;//8'h61;//
+      sending_fifo[2] <= draw_row1[7:0];//8'h67;
+      sending_fifo[3] <= 8'h0A; //from 0A
     end
   end
 end
@@ -175,9 +181,9 @@ bluetooth_rx bt_rx_inst (
 
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
-    display_val <= 32'hFEEDBEEF;
+    display_val[23:0] <= {BLACK, 16'hBEEF};
   end else if (finished_receiving) begin
-    display_val <= {display_val[23:0], data_out};
+    display_val[23:0] <= {display_val[15:0], data_out};
   end 
 end
 
@@ -197,39 +203,77 @@ logic drawn_finished;
 
 logic [7:0] real_draw_col1;
 logic [8:0] real_draw_row1;
+logic [7:0] real_draw_color;
 logic [7:0] col_fifo [1:0];
 logic [8:0] row_fifo [1:0];
+logic [7:0] color_fifo [1:0];
 logic count_display_fifo;
 
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     col_fifo[0] <= draw_col1;
     row_fifo[0] <= draw_row1;
+    color_fifo[0] <= BLACK;
     col_fifo[1] <= display_val[15:8];
     row_fifo[1] <= display_val[7:0];
+    color_fifo[1] <= display_val[23:16];
     count_display_fifo <= 0;
     real_draw_col1 <= 0;
     real_draw_row1 <= 0;
+    real_draw_color <= BLACK;
   end else if (drawn_finished) begin
     count_display_fifo <= ~count_display_fifo;
     real_draw_col1 <= col_fifo[count_display_fifo];
     real_draw_row1 <= row_fifo[count_display_fifo];
+    real_draw_color <= color_fifo[count_display_fifo];
     col_fifo[0] <= draw_col1;
     row_fifo[0] <= draw_row1;
+    color_fifo[0] <= curr_color_own;
     col_fifo[1] <= display_val[15:8];
     row_fifo[1] <= display_val[7:0];
+    color_fifo[1] <= display_val[23:16];
   end
 end
-  
+
+logic [7:0] curr_color_own;
+logic old_btn3;
+parameter BLACK = 8'h00, WHITE = 8'hFF, RED = 8'hF8, BLUE = 8'h1F;
+logic [1:0] color_counter;
+always_ff @(posedge clk_100mhz) begin
+  if (sys_rst) begin
+    curr_color_own <= BLACK;
+    color_counter <= 0;
+  end else if (~old_btn3 && btn3) begin
+    if (color_counter == 0) begin
+      curr_color_own <= BLACK;
+      display_val[31:24] <= BLACK;
+    end else if (color_counter == 1) begin
+      curr_color_own <= WHITE;
+      display_val[31:24] <= WHITE;
+    end else if (color_counter == 2) begin
+      curr_color_own <= RED;
+      display_val[31:24] <= RED;
+    end else if (color_counter == 3) begin
+      curr_color_own <= BLUE;
+      display_val[31:24] <= BLUE;
+    end else begin
+      curr_color_own <= BLACK;
+      display_val[31:24] <= BLACK;
+    end
+    color_counter <= color_counter + 1;
+  end
+  old_btn3 <= btn3;
+end
+
 display screen
 ( .clk_in(clk_100mhz),
   .rst_in(sys_rst),
-  .custom_in(btn3),
+  .custom_in(0), //SETTING FROM BTN3 to 0 FOR NOW
   
   .col1_in(real_draw_col1),//.col1_in(draw_col1),
-  .col2_in(real_draw_col1),//.col2_in(draw_col2),
+  .col2_in(real_draw_col1+2),//.col2_in(draw_col2),
   .row1_in(real_draw_row1),//.row1_in(draw_row1),
-  .row2_in(real_draw_row1),//.row2_in(draw_row2),
+  .row2_in(real_draw_row1+2),//.row2_in(draw_row2),
   .color_in(draw_color),
   .valid_in(valid_draw_data),
   
@@ -240,6 +284,8 @@ display screen
   .tft_reset(pmoda[4]),
   .tft_cs(pmoda[2]),
   .drawn_finished(drawn_finished),
+
+  .curr_color(real_draw_color),
   
   .sw(sw),
   .state_out(state)
@@ -250,10 +296,10 @@ display screen
 always_ff @(posedge clk_100mhz) begin
   
   if (btn2) begin
-    draw_col1 <= sw[15:9];
-    draw_col2 <= sw[15:9];
-    draw_row1 <= sw[8:0];
-    draw_row2 <= sw[8:0];
+    draw_col1 <= sw[15:8];
+    draw_col2 <= sw[15:8];
+    draw_row1 <= sw[7:0];
+    draw_row2 <= sw[7:0];
     draw_color <= 0;
     valid_draw_data <= 1;
   end

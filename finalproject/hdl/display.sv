@@ -17,6 +17,8 @@ module display
           input wire [$clog2(NUM_ROWS)-1:0] row2_in,
           input wire [COLOR_WIDTH-1:0] color_in,
           input wire valid_in,
+
+          input wire [7:0] curr_color,
           
           input wire tft_sdo,
           output logic tft_sck,
@@ -70,7 +72,7 @@ module display
     {1'b0, 8'h29}                // Display on
   };
   
-  localparam DRAW_SEQ_SIZE = 13;
+  localparam DRAW_SEQ_SIZE = 29;
   logic [4:0] draw_seq_index;
   logic [0:DRAW_SEQ_SIZE-1][8:0] DRAW_SEQ;
   assign DRAW_SEQ = {
@@ -79,7 +81,7 @@ module display
     // Set Page (Row) Address
     {1'b0, 8'h2B}, {1'b1, row1[15:8]}, {1'b1, row1[7:0]}, {1'b1, row2[15:8]}, {1'b1, row2[7:0]},
     // Memory Write
-    {1'b0, 8'h2C}, {1'b1, 8'hFF}, {1'b1, 8'hFF}
+    {1'b0, 8'h2C}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}
     // COLORS
     
   };
