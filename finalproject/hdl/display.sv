@@ -24,6 +24,8 @@ module display
           output logic tft_dc,
           output logic tft_reset,
           output logic tft_cs,
+
+          output logic drawn_finished,
           
           input wire [15:0] sw,
           output logic [4:0] state_out
@@ -67,66 +69,6 @@ module display
     {1'b0, 8'h11},                // Exit Sleep
     {1'b0, 8'h29}                // Display on
   };
-
-  /*
-  localparam INIT_DATA_SIZE = 19; // instructions to send
-  logic [5:0] init_data_index;
-  logic [0:INIT_DATA_SIZE-1][8:0] INIT_DATA = {
-    {1'b0, 8'h11, 45'b0}, // take out of sleep mode
-		{1'b0, 8'h28, 45'b0}, // Display OFF
-		{1'b0, 8'hCF, 1'b1, 8'h00, 1'b1, 8'h83, 1'b1, 8'h30, 18'b0}, // Power control B
-		{1'b0, 8'hED, 1'b1, 8'h64, 1'b1, 8'h03, 1'b1, 8'h12, 1'b1, 8'h81, 9'b0}, // Power on sequence control
-		{1'b0, 8'hE8, 1'b1, 8'h85, 1'b1, 8'h01, 1'b1, 8'h79, 18'b0}, // Driver timing control A
-		{1'b0, 8'hCB, 1'b1, 8'h39, 1'b1, 8'h2C, 1'b1, 8'h00, 1'b1, 8'h34, 1'b1, 8'h02}, // Power control A
-		{1'b0, 8'hF7, 1'b1, 8'h20 , 36'b0}, // Pump ratio control
-		{1'b0, 8'hEA, 1'b1, 8'h00, 1'b1, 8'h00, 27'b0}, // Driver timing control B
-		{1'b0, 8'hC0, 1'b1, 8'h26, 36'b0}, // Power Control 1
-		{1'b0, 8'hC1, 1'b1, 8'h11, 36'b0}, // Power Control 2
-		{1'b0, 8'hC5, 1'b1, 8'h35, 1'b1, 8'h3E, 27'b0}, // VCOM Control 1
-		{1'b0, 8'hC7, 1'b1, 8'hBE, 36'b0}, // VCOM Control 2
-		{1'b0, 8'h3A, 1'b1, 8'h55, 36'b0}, // COLMOD: Pixel Format Set
-		{1'b0, 8'hB1, 1'b1, 8'h00, 1'b1, 8'h1B, 27'b0}, // Frame Rate Control
-		{1'b0, 8'h26, 1'b1, 8'h01, 36'b0}, // Gamma Set
-		{1'b0, 8'h51, 1'b1, 8'hFF, 36'b0}, // Write Display Brightness
-		{1'b0, 8'hB7, 1'b1, 8'h07, 36'b0}, // Entry Mode Set
-		{1'b0, 8'hB6, 1'b1, 8'h0A, 1'b1, 8'h82, 1'b1, 8'h27, 1'b1, 8'h00, 9'b0}, // Display Function Control
-		{1'b0, 8'h29, 45'b0} // Display ON
-  };*/
-  
-  /*
-  localparam INIT_DATA_SIZE = 53; // instructions to send
-  logic [5:0] init_data_index;
-  logic [0:INIT_DATA_SIZE-1][8:0] INIT_DATA = {
-    {1'b0, 8'h11}, // take out of sleep mode
-    // Turn off Display
-		{1'b0, 8'h28},
-		// Init (??)
-		{1'b0, 8'hCF}, {1'b1, 8'h00}, {1'b1, 8'h83}, {1'b1, 8'h30}, 
-		{1'b0, 8'hED}, {1'b1, 8'h64}, {1'b1, 8'h03}, {1'b1, 8'h12}, {1'b1, 8'h81},
-		{1'b0, 8'hE8}, {1'b1, 8'h85}, {1'b1, 8'h01}, {1'b1, 8'h79}, 
-		{1'b0, 8'hCB}, {1'b1, 8'h39}, {1'b1, 8'h2C}, {1'b1, 8'h00}, {1'b1, 8'h34}, {1'b1, 8'h02},
-		{1'b0, 8'hF7}, {1'b1, 8'h20},
-		{1'b0, 8'hEA}, {1'b1, 8'h00}, {1'b1, 8'h00},
-		// Power Control
-		{1'b0, 8'hC0}, {1'b1, 8'h26},
-		{1'b0, 8'hC1}, {1'b1, 8'h11},
-		// VCOM
-		{1'b0, 8'hC5}, {1'b1, 8'h35}, {1'b1, 8'h3E},
-		{1'b0, 8'hC7}, {1'b1, 8'hBE},
-		// Memory Access Control
-		{1'b0, 8'h3A}, {1'b1, 8'h55},
-		// Frame Rate
-		{1'b0, 8'hB1}, {1'b1, 8'h00}, {1'b1, 8'h1B},
-		// Gamma
-		{1'b0, 8'h26}, {1'b1, 8'h01},
-		// Brightness
-		{1'b0, 8'h51}, {1'b1, 8'hFF},
-		// Display
-		{1'b0, 8'hB7}, {1'b1, 8'h07},
-		{1'b0, 8'hB6}, {1'b1, 8'h0A}, {1'b1, 8'h82}, {1'b1, 8'h27}, {1'b1, 8'h00},
-		{1'b0, 8'h29}, // Enable Display
-		{1'b0, 8'h2C} // Start  Memory-Write
-  };*/
   
   localparam DRAW_SEQ_SIZE = 13;
   logic [4:0] draw_seq_index;
@@ -184,6 +126,7 @@ module display
       init_data_index <= 0;
       custom_data_index <= 0;
       state <= RESET;
+      drawn_finished <= 0;
     end
     else begin
       if (trigger_in) begin
@@ -231,6 +174,8 @@ module display
           end
           
           IDLE: begin
+            drawn_finished <= 0;
+
             if (valid_in) begin
               col1 <= col1_in;
               col2 <= col2_in;
@@ -271,6 +216,7 @@ module display
               draw_seq_index <= draw_seq_index + 1;
               delay <= STANDARD_DELAY;
             end else begin
+              drawn_finished <= 1;
               tft_cs <= 1;
               state <= IDLE;
             end

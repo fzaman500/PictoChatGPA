@@ -115,9 +115,9 @@ always_ff @(posedge clk_100mhz) begin
     packet <= 8'b0000_0000;
     //tx_finished <= 0;
     count_fifo <= 0;
-    sending_fifo[1] <= draw_col1;//8'h61;//
-    sending_fifo[2] <= draw_row1[7:0];//8'h67;
-    sending_fifo[3] <= 8'h0A; //from 0A
+    sending_fifo[0] <= draw_col1;//8'h61;//
+    sending_fifo[1] <= draw_row1[7:0];//8'h67;
+    sending_fifo[2] <= 8'h0A; //from 0A
   end else begin
     if (tx_finished) begin
       if (count_fifo == 2) begin
@@ -125,12 +125,12 @@ always_ff @(posedge clk_100mhz) begin
       end else begin
         count_fifo <= count_fifo + 1;
       end
-      sending_fifo[1] <= draw_col1;//8'h61;//
-      sending_fifo[2] <= draw_row1[7:0];//8'h67;
-      sending_fifo[3] <= 8'h0A; //from 0A
-  end else begin
-    packet <= sending_fifo[count_fifo];
-  end
+      sending_fifo[0] <= draw_col1;//draw_col1;//8'h61;//
+      sending_fifo[1] <= draw_row1[7:0];//draw_row1[7:0];//8'h67;
+      sending_fifo[2] <= 8'h0A; //from 0A
+    end else begin
+      packet <= sending_fifo[count_fifo];
+    end
   end
 end
 
@@ -193,13 +193,32 @@ logic [8:0] draw_row2;
 logic [2:0] draw_color;
 logic valid_draw_data;
 logic [4:0] state;
+logic drawn_finished;
 
 logic [7:0] real_draw_col1;
 logic [8:0] real_draw_row1;
 logic [7:0] col_fifo [1:0];
 logic [8:0] row_fifo [1:0];
-always_ff @(posedge clk_100mhz) begin
+logic count_display_fifo;
 
+always_ff @(posedge clk_100mhz) begin
+  if (sys_rst) begin
+    col_fifo[0] <= draw_col1;
+    row_fifo[0] <= draw_row1;
+    col_fifo[1] <= display_val[15:8];
+    row_fifo[1] <= display_val[7:0];
+    count_display_fifo <= 0;
+    real_draw_col1 <= 0;
+    real_draw_row1 <= 0;
+  end else if (drawn_finished) begin
+    count_display_fifo <= ~count_display_fifo;
+    real_draw_col1 <= col_fifo[count_display_fifo];
+    real_draw_row1 <= row_fifo[count_display_fifo];
+    col_fifo[0] <= draw_col1;
+    row_fifo[0] <= draw_row1;
+    col_fifo[1] <= display_val[15:8];
+    row_fifo[1] <= display_val[7:0];
+  end
 end
   
 display screen
@@ -207,10 +226,10 @@ display screen
   .rst_in(sys_rst),
   .custom_in(btn3),
   
-  .col1_in(draw_col1),
-  .col2_in(draw_col2),
-  .row1_in(draw_row1),
-  .row2_in(draw_row2),
+  .col1_in(real_draw_col1),//.col1_in(draw_col1),
+  .col2_in(real_draw_col1),//.col2_in(draw_col2),
+  .row1_in(real_draw_row1),//.row1_in(draw_row1),
+  .row2_in(real_draw_row1),//.row2_in(draw_row2),
   .color_in(draw_color),
   .valid_in(valid_draw_data),
   
@@ -220,6 +239,7 @@ display screen
   .tft_dc(pmoda[3]),
   .tft_reset(pmoda[4]),
   .tft_cs(pmoda[2]),
+  .drawn_finished(drawn_finished),
   
   .sw(sw),
   .state_out(state)

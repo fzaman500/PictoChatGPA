@@ -16,6 +16,7 @@ from bleak import BleakClient, BleakScanner
 from bleak.backends.characteristic import BleakGATTCharacteristic
 from bleak.backends.device import BLEDevice
 from bleak.backends.scanner import AdvertisementData
+import binascii
 
 UART_SERVICE_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 UART_RX_CHAR_UUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -60,8 +61,8 @@ async def uart_terminal():
 
     def handle_rx(_: BleakGATTCharacteristic, data: bytearray):
         print("received:", data)
-        #print(data.decode("all-escapes"))
-
+        ret = binascii.hexlify(data)
+        print("received:", ret)
 
     async with BleakClient(device, disconnected_callback=handle_disconnect) as client:
         await client.start_notify(UART_TX_CHAR_UUID, handle_rx)
@@ -93,11 +94,10 @@ async def uart_terminal():
             # single BLE packet. We can use the max_write_without_response_size
             # property to split the data into chunks that will fit.
 
-            for s in sliced(data, rx_char.max_write_without_response_size):
+            for s in sliced(binascii.unhexlify(data.decode()), rx_char.max_write_without_response_size):
                 await client.write_gatt_char(rx_char, s, response=False)
 
-            print("type", type(data))
-            print("sent:", data)
+            print("sent:", binascii.unhexlify(data.decode()))
 
 
 if __name__ == "__main__":
