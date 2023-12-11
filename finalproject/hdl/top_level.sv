@@ -181,7 +181,7 @@ bluetooth_rx bt_rx_inst (
 
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
-    display_val[23:0] <= {BLACK, 16'hBEEF};
+    display_val[23:0] <= {BLACK, 16'h0000};
   end else if (finished_receiving) begin
     display_val[23:0] <= {display_val[15:0], data_out};
   end 
@@ -265,15 +265,26 @@ always_ff @(posedge clk_100mhz) begin
   old_btn3 <= btn3;
 end
 
+logic [2:0] space;
+always_comb begin
+  if (sys_rst) begin
+    space = 3;
+  end else if (sw[15]) begin
+    space = 1;
+  end else begin
+    space = 3;
+  end
+end
+
 display screen
 ( .clk_in(clk_100mhz),
   .rst_in(sys_rst),
   .custom_in(0), //SETTING FROM BTN3 to 0 FOR NOW
   
   .col1_in(real_draw_col1),//.col1_in(draw_col1),
-  .col2_in(real_draw_col1+2),//.col2_in(draw_col2),
+  .col2_in(real_draw_col1+space),//.col2_in(draw_col2),
   .row1_in(real_draw_row1),//.row1_in(draw_row1),
-  .row2_in(real_draw_row1+2),//.row2_in(draw_row2),
+  .row2_in(real_draw_row1+space),//.row2_in(draw_row2),
   .color_in(draw_color),
   .valid_in(valid_draw_data),
   
@@ -296,10 +307,10 @@ display screen
 always_ff @(posedge clk_100mhz) begin
   
   if (btn2) begin
-    draw_col1 <= sw[15:8];
-    draw_col2 <= sw[15:8];
-    draw_row1 <= sw[7:0];
-    draw_row2 <= sw[7:0];
+    draw_col1 <= {9'b111111111, sw[14:8]};
+    draw_col2 <= {9'b111111111, sw[14:8]};
+    draw_row1 <= {8'h00, sw[7:0]};
+    draw_row2 <= {8'h00, sw[7:0]};
     draw_color <= 0;
     valid_draw_data <= 1;
   end

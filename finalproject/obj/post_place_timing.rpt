@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Sun Dec 10 20:08:41 2023
+| Date         : Mon Dec 11 19:41:31 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_place_timing.rpt
 | Design       : top_level
@@ -12,20 +12,20 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             3.645ns  (required time - arrival time)
-  Source:                 screen/delay_reg[27]/C
+Slack (MET) :             3.524ns  (required time - arrival time)
+  Source:                 screen/init_data_index_reg[9]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            screen/delay_reg[29]/D
+  Destination:            screen/delay_reg[28]/CE
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        6.356ns  (logic 2.834ns (44.588%)  route 3.522ns (55.412%))
-  Logic Levels:           12  (CARRY4=8 LUT2=1 LUT4=2 LUT5=1)
-  Clock Path Skew:        -0.026ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.770ns = ( 14.770 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.063ns
-    Clock Pessimism Removal (CPR):    0.268ns
+  Data Path Delay:        5.960ns  (logic 1.585ns (26.594%)  route 4.375ns (73.406%))
+  Logic Levels:           4  (LUT4=1 LUT5=3)
+  Clock Path Skew:        -0.109ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.767ns = ( 14.767 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.129ns
+    Clock Pessimism Removal (CPR):    0.254ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -40,44 +40,20 @@ Slack (MET) :             3.645ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=475, estimated)      1.555     5.063    screen/clk_100mhz_IBUF_BUFG
-    SLICE_X51Y60         FDRE                                         r  screen/delay_reg[27]/C
+                         net (fo=471, estimated)      1.621     5.129    screen/clk
+    SLICE_X59Y59         FDRE                                         r  screen/init_data_index_reg[9]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X51Y60         FDRE (Prop_fdre_C_Q)         0.456     5.519 r  screen/delay_reg[27]/Q
-                         net (fo=2, estimated)        0.674     6.193    screen/delay_reg[27]
-    SLICE_X50Y60         LUT4 (Prop_lut4_I0_O)        0.124     6.317 r  screen/FSM_sequential_state[2]_i_14/O
-                         net (fo=2, estimated)        0.832     7.149    screen/FSM_sequential_state[2]_i_14_n_0
-    SLICE_X50Y60         LUT5 (Prop_lut5_I4_O)        0.150     7.299 r  screen/FSM_sequential_state[2]_i_7/O
-                         net (fo=2, estimated)        0.754     8.053    screen/FSM_sequential_state[2]_i_7_n_0
-    SLICE_X52Y57         LUT4 (Prop_lut4_I2_O)        0.328     8.381 f  screen/data_in[8]_i_4/O
-                         net (fo=62, estimated)       0.753     9.134    screen/spi/trigger_in_reg_0
-    SLICE_X50Y56         LUT2 (Prop_lut2_I1_O)        0.153     9.287 r  screen/spi/delay[0]_i_5/O
-                         net (fo=6, estimated)        0.509     9.796    screen/spi/tft_reset1
-    SLICE_X51Y54         CARRY4 (Prop_carry4_DI[2]_CO[3])
-                                                      0.605    10.401 r  screen/spi/delay_reg[0]_i_2/CO[3]
-                         net (fo=1, estimated)        0.000    10.401    screen/spi/delay_reg[0]_i_2_n_0
-    SLICE_X51Y55         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.515 r  screen/spi/delay_reg[4]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    10.515    screen/spi/delay_reg[4]_i_1_n_0
-    SLICE_X51Y56         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.629 r  screen/spi/delay_reg[8]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    10.629    screen/spi/delay_reg[8]_i_1_n_0
-    SLICE_X51Y57         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.743 r  screen/spi/delay_reg[12]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    10.743    screen/spi/delay_reg[12]_i_1_n_0
-    SLICE_X51Y58         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.857 r  screen/spi/delay_reg[16]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    10.857    screen/spi/delay_reg[16]_i_1_n_0
-    SLICE_X51Y59         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    10.971 r  screen/spi/delay_reg[20]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    10.971    screen/spi/delay_reg[20]_i_1_n_0
-    SLICE_X51Y60         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    11.085 r  screen/spi/delay_reg[24]_i_1/CO[3]
-                         net (fo=1, estimated)        0.000    11.085    screen/spi/delay_reg[24]_i_1_n_0
-    SLICE_X51Y61         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334    11.419 r  screen/spi/delay_reg[28]_i_1/O[1]
-                         net (fo=1, routed)           0.000    11.419    screen/spi_n_33
-    SLICE_X51Y61         FDRE                                         r  screen/delay_reg[29]/D
+    SLICE_X59Y59         FDRE (Prop_fdre_C_Q)         0.419     5.548 r  screen/init_data_index_reg[9]/Q
+                         net (fo=3, estimated)        0.961     6.509    screen/init_data_index_reg[9]
+    SLICE_X59Y58         LUT4 (Prop_lut4_I3_O)        0.327     6.836 r  screen/init_data_index_reg_rep_i_12/O
+                         net (fo=2, estimated)        0.561     7.397    screen/init_data_index_reg_rep_i_12_n_0
+    SLICE_X59Y59         LUT5 (Prop_lut5_I3_O)        0.326     7.723 r  screen/init_data_index_reg_rep_i_9/O
+                         net (fo=6, estimated)        1.328     9.051    screen/init_data_index_reg_rep_i_9_n_0
+    SLICE_X57Y63         LUT5 (Prop_lut5_I2_O)        0.152     9.203 f  screen/delay[0]_i_3/O
+                         net (fo=1, estimated)        0.836    10.039    screen/spi/delay_reg_31_sn_1
+    SLICE_X57Y63         LUT5 (Prop_lut5_I4_O)        0.361    10.400 r  screen/spi/delay[0]_i_1/O
+                         net (fo=32, estimated)       0.689    11.089    screen/spi_n_42
+    SLICE_X56Y66         FDRE                                         r  screen/delay_reg[28]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -86,16 +62,16 @@ Slack (MET) :             3.645ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.873    13.244    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.335 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=475, estimated)      1.435    14.770    screen/clk_100mhz_IBUF_BUFG
-    SLICE_X51Y61         FDRE                                         r  screen/delay_reg[29]/C
-                         clock pessimism              0.268    15.037    
-                         clock uncertainty           -0.035    15.002    
-    SLICE_X51Y61         FDRE (Setup_fdre_C_D)        0.062    15.064    screen/delay_reg[29]
+                         net (fo=471, estimated)      1.432    14.767    screen/clk
+    SLICE_X56Y66         FDRE                                         r  screen/delay_reg[28]/C
+                         clock pessimism              0.254    15.020    
+                         clock uncertainty           -0.035    14.985    
+    SLICE_X56Y66         FDRE (Setup_fdre_C_CE)      -0.372    14.613    screen/delay_reg[28]
   -------------------------------------------------------------------
-                         required time                         15.064    
-                         arrival time                         -11.419    
+                         required time                         14.613    
+                         arrival time                         -11.089    
   -------------------------------------------------------------------
-                         slack                                  3.645    
+                         slack                                  3.524    
 
 
 

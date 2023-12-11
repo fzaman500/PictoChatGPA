@@ -72,8 +72,8 @@ module display
     {1'b0, 8'h29}                // Display on
   };
   
-  localparam DRAW_SEQ_SIZE = 29;
-  logic [4:0] draw_seq_index;
+  /*localparam DRAW_SEQ_SIZE = 29;
+  logic [5:0] draw_seq_index;
   logic [0:DRAW_SEQ_SIZE-1][8:0] DRAW_SEQ;
   assign DRAW_SEQ = {
     // Set Column Address
@@ -82,6 +82,36 @@ module display
     {1'b0, 8'h2B}, {1'b1, row1[15:8]}, {1'b1, row1[7:0]}, {1'b1, row2[15:8]}, {1'b1, row2[7:0]},
     // Memory Write
     {1'b0, 8'h2C}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}
+    // COLORS
+    
+  };
+
+  //BIGGER
+  localparam DRAW_SEQ_SIZE_BIGGER = 43;
+  logic [6:0] draw_seq_index_bigger;
+  logic [0:DRAW_SEQ_SIZE-1][8:0] DRAW_SEQ_BIGGER;
+  assign DRAW_SEQ_BIGGER = {
+    // Set Column Address
+    {1'b0, 8'h2A}, {1'b1, col1[15:8]}, {1'b1, col1[7:0]}, {1'b1, col2[15:8]}, {1'b1, col2[7:0]},
+    // Set Page (Row) Address
+    {1'b0, 8'h2B}, {1'b1, row1[15:8]}, {1'b1, row1[7:0]}, {1'b1, row2[15:8]}, {1'b1, row2[7:0]},
+    // Memory Write
+    {1'b0, 8'h2C}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}
+    // COLORS
+    
+  };
+*/
+
+  localparam DRAW_SEQ_SIZE = 43;
+  logic [6:0] draw_seq_index;
+  logic [0:DRAW_SEQ_SIZE-1][8:0] DRAW_SEQ;
+  assign DRAW_SEQ = {
+    // Set Column Address
+    {1'b0, 8'h2A}, {1'b1, col1[15:8]}, {1'b1, col1[7:0]}, {1'b1, col2[15:8]}, {1'b1, col2[7:0]},
+    // Set Page (Row) Address
+    {1'b0, 8'h2B}, {1'b1, row1[15:8]}, {1'b1, row1[7:0]}, {1'b1, row2[15:8]}, {1'b1, row2[7:0]},
+    // Memory Write
+    {1'b0, 8'h2C}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}, {1'b1, curr_color}
     // COLORS
     
   };
@@ -119,7 +149,7 @@ module display
   touch_state state;
   assign state_out = state;
   
-  always_ff @(posedge clk_in) begin
+    always_ff @(posedge clk_in) begin
   
     if (rst_in) begin
       tft_reset <= 0; // active low
@@ -231,4 +261,3 @@ module display
 
 endmodule
 `default_nettype wire // prevents system from inferring an undeclared logic (good practice)
-
