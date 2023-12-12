@@ -17,7 +17,8 @@ module top_level(
   output logic [6:0] ss0_c, //cathode controls for the segments of upper four digits
   output logic [6:0] ss1_c, //cathod controls for the segments of lower four digits
   output logic [2:0] rgb0, //rgb led
-  output logic [2:0] rgb1 //rgb led
+  output logic [2:0] rgb1, //rgb led
+  output logic [15:0] led
   );
 
 //BUTTON CLEANING
@@ -68,27 +69,6 @@ end
 
 logic sys_rst;
 assign sys_rst = btn0;
-
-/*
-//I2C Module
-logic [8:0] x_from_i2c;
-logic [7:0] y_from_i2c;
-
-
-//Processing Touch
-logic [2:0] color;
-logic ad;
-process_touch process_touch_inst (
-  .x(x_from_i2c),
-  .y(y_from_i2c),
-  .color(color),
-  .active_draw(ad)
-);
-*/
-
-
-
-
 
 //ALL OF THE BLUETOOTH
 logic clean_ble_uart_tx;
@@ -187,7 +167,35 @@ always_ff @(posedge clk_100mhz) begin
   end 
 end
 
+//I2C STUFF
+ logic valid_touch_out;
+logic [15:0] x_out;
+logic [15:0] y_out;
+logic [7:0] touch_out;
 
+touchscreen touch
+      ( .clk_in(clk_100mhz),
+        .rst_in(sys_rst),
+        
+        .i2c_irq(pmodb[6]), // interrupt, active low
+        .i2c_sda(sda), // data
+        .i2c_clk(pmoda[7]), // clock
+        
+        .valid_out(valid_touch_out),
+        .x_out(x_out),
+        .y_out(y_out),
+        
+        .touch_out(touch_out),
+        .sw(sw)
+      );
+
+always_ff @(posedge clk_100mhz) begin
+  if (valid_touch_out) begin
+    led[7:0] <= x_out;
+    led[15:8] <= y_out[8:1];
+    //led[11:0] <= y_out;
+  end
+end
 
 
 
@@ -200,6 +208,7 @@ logic [2:0] draw_color;
 logic valid_draw_data;
 logic [4:0] state;
 logic drawn_finished;
+logic valid_draw_data;
 
 logic [7:0] real_draw_col1;
 logic [8:0] real_draw_row1;
@@ -303,7 +312,7 @@ display screen
 );
 
 // TESTING CODE
- 
+ /*
 always_ff @(posedge clk_100mhz) begin
   
   if (btn2) begin
@@ -318,6 +327,14 @@ always_ff @(posedge clk_100mhz) begin
     valid_draw_data <= 0;
   end
 end
+*/
+
+assign draw_col1 = 239 - (2*x_out);
+assign draw_col2 = (239 - (2*x_out)) + 2;
+assign draw_row1 = 319 - (2*y_out);
+assign draw_row2 = (319 - (2*y_out)) + 2;
+assign draw_color = 8'hFF;
+assign valid_draw_data = valid_touch_out;
 
 endmodule // top_level
 `default_nettype wire
