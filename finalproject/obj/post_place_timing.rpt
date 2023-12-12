@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Tue Dec 12 20:20:05 2023
+| Date         : Tue Dec 12 21:02:02 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_place_timing.rpt
 | Design       : top_level
@@ -12,19 +12,19 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             2.551ns  (required time - arrival time)
+Slack (MET) :             3.290ns  (required time - arrival time)
   Source:                 touch/i2c_comm/period_counter_reg[7]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            touch/i2c_comm/sending_i_reg[29]/R
+  Destination:            touch/i2c_comm/sending_i_reg[2]/R
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        6.753ns  (logic 1.511ns (22.375%)  route 5.242ns (77.625%))
+  Data Path Delay:        6.144ns  (logic 1.439ns (23.421%)  route 4.705ns (76.579%))
   Logic Levels:           5  (LUT4=1 LUT6=4)
-  Clock Path Skew:        -0.137ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.838ns = ( 14.838 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.148ns
+  Clock Path Skew:        -0.102ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.857ns = ( 14.857 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.132ns
     Clock Pessimism Removal (CPR):    0.174ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
@@ -40,22 +40,22 @@ Slack (MET) :             2.551ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=541, estimated)      1.640     5.148    touch/i2c_comm/clk_100mhz_IBUF_BUFG
-    SLICE_X2Y46          FDRE                                         r  touch/i2c_comm/period_counter_reg[7]/C
+                         net (fo=501, estimated)      1.624     5.132    touch/i2c_comm/clk_100mhz_IBUF_BUFG
+    SLICE_X1Y55          FDRE                                         r  touch/i2c_comm/period_counter_reg[7]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X2Y46          FDRE (Prop_fdre_C_Q)         0.478     5.626 r  touch/i2c_comm/period_counter_reg[7]/Q
-                         net (fo=6, estimated)        0.989     6.615    touch/i2c_comm/period_counter[7]
-    SLICE_X2Y46          LUT6 (Prop_lut6_I0_O)        0.301     6.916 f  touch/i2c_comm/i2c_clk_i_8/O
-                         net (fo=7, estimated)        0.866     7.782    touch/i2c_comm/i2c_clk_i_8_n_0
-    SLICE_X3Y49          LUT4 (Prop_lut4_I1_O)        0.152     7.934 f  touch/i2c_comm/sending_i[31]_i_11/O
-                         net (fo=2, estimated)        0.813     8.747    touch/i2c_comm/sending_i[31]_i_11_n_0
-    SLICE_X3Y50          LUT6 (Prop_lut6_I1_O)        0.332     9.079 r  touch/i2c_comm/sending_i[31]_i_5/O
-                         net (fo=1, estimated)        0.555     9.634    touch/i2c_comm/sending_i[31]_i_5_n_0
-    SLICE_X4Y51          LUT6 (Prop_lut6_I3_O)        0.124     9.758 r  touch/i2c_comm/sending_i[31]_i_2/O
-                         net (fo=34, estimated)       0.900    10.658    touch/i2c_comm/sending_i[31]_i_2_n_0
-    SLICE_X7Y47          LUT6 (Prop_lut6_I5_O)        0.124    10.782 r  touch/i2c_comm/sending_i[31]_i_1/O
-                         net (fo=24, estimated)       1.119    11.901    touch/i2c_comm/sending_i[31]_i_1_n_0
-    SLICE_X6Y54          FDRE                                         r  touch/i2c_comm/sending_i_reg[29]/R
+    SLICE_X1Y55          FDRE (Prop_fdre_C_Q)         0.419     5.551 r  touch/i2c_comm/period_counter_reg[7]/Q
+                         net (fo=6, estimated)        0.983     6.534    touch/i2c_comm/period_counter[7]
+    SLICE_X2Y55          LUT6 (Prop_lut6_I0_O)        0.296     6.830 f  touch/i2c_comm/i2c_clk_i_8/O
+                         net (fo=5, estimated)        0.954     7.784    touch/i2c_comm/i2c_clk_i_8_n_0
+    SLICE_X3Y52          LUT4 (Prop_lut4_I1_O)        0.150     7.934 f  touch/i2c_comm/sending_i[31]_i_10/O
+                         net (fo=1, estimated)        0.570     8.504    touch/i2c_comm/sending_i[31]_i_10_n_0
+    SLICE_X4Y51          LUT6 (Prop_lut6_I3_O)        0.326     8.830 r  touch/i2c_comm/sending_i[31]_i_3/O
+                         net (fo=1, estimated)        0.830     9.660    touch/i2c_comm/sending_i[31]_i_3_n_0
+    SLICE_X4Y51          LUT6 (Prop_lut6_I1_O)        0.124     9.784 r  touch/i2c_comm/sending_i[31]_i_2/O
+                         net (fo=34, estimated)       0.526    10.310    touch/i2c_comm/sending_i[31]_i_2_n_0
+    SLICE_X0Y52          LUT6 (Prop_lut6_I5_O)        0.124    10.434 r  touch/i2c_comm/sending_i[31]_i_1/O
+                         net (fo=24, estimated)       0.842    11.276    touch/i2c_comm/sending_i[31]_i_1_n_0
+    SLICE_X1Y46          FDRE                                         r  touch/i2c_comm/sending_i_reg[2]/R
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -64,16 +64,16 @@ Slack (MET) :             2.551ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.873    13.244    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.335 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=541, estimated)      1.503    14.838    touch/i2c_comm/clk_100mhz_IBUF_BUFG
-    SLICE_X6Y54          FDRE                                         r  touch/i2c_comm/sending_i_reg[29]/C
-                         clock pessimism              0.174    15.011    
-                         clock uncertainty           -0.035    14.976    
-    SLICE_X6Y54          FDRE (Setup_fdre_C_R)       -0.524    14.452    touch/i2c_comm/sending_i_reg[29]
+                         net (fo=501, estimated)      1.522    14.857    touch/i2c_comm/clk_100mhz_IBUF_BUFG
+    SLICE_X1Y46          FDRE                                         r  touch/i2c_comm/sending_i_reg[2]/C
+                         clock pessimism              0.174    15.030    
+                         clock uncertainty           -0.035    14.995    
+    SLICE_X1Y46          FDRE (Setup_fdre_C_R)       -0.429    14.566    touch/i2c_comm/sending_i_reg[2]
   -------------------------------------------------------------------
-                         required time                         14.452    
-                         arrival time                         -11.901    
+                         required time                         14.566    
+                         arrival time                         -11.276    
   -------------------------------------------------------------------
-                         slack                                  2.551    
+                         slack                                  3.290    
 
 
 

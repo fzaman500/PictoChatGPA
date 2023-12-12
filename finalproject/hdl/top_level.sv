@@ -159,12 +159,18 @@ bluetooth_rx bt_rx_inst (
   .data_out(data_out)
 );
 
+
+logic [1:0] finished_receiving_counter;
 always_ff @(posedge clk_100mhz) begin
   if (sys_rst) begin
     display_val[23:0] <= {BLACK, 16'h0000};
+    finished_receiving_counter <= 0;
   end else if (finished_receiving) begin
     display_val[23:0] <= {display_val[15:0], data_out};
-  end 
+    finished_receiving_counter <= finished_receiving_counter + 1;
+  end else if (finished_receiving_counter == 3) begin
+    finished_receiving_counter <= 0;
+  end
 end
 
 //I2C STUFF
@@ -230,22 +236,26 @@ always_ff @(posedge clk_100mhz) begin
     real_draw_col1 <= 0;
     real_draw_row1 <= 0;
     real_draw_color <= BLACK;
+    bt_draw <= 0;
   end else if (drawn_finished) begin
     count_display_fifo <= ~count_display_fifo;
-    real_draw_col1 <= col_fifo[count_display_fifo];
-    real_draw_row1 <= row_fifo[count_display_fifo];
-    real_draw_color <= color_fifo[count_display_fifo];
-    col_fifo[0] <= draw_col1;
-    row_fifo[0] <= draw_row1;
-    color_fifo[0] <= curr_color_own;
-    col_fifo[1] <= display_val[15:8];
-    row_fifo[1] <= display_val[7:0];
-    color_fifo[1] <= display_val[23:16];
+    real_draw_col1 <= draw_col1;
+    real_draw_row1 <= draw_row1;
+    real_draw_color <= curr_color_own;
+    bt_draw <= 0;
+  end else if (finished_receiving_counter == 3) begin
+    real_draw_col1 <= display_val[15:8];
+    real_draw_row1 <= display_val[7:0];
+    real_draw_color <= display_val[23:16];
+    bt_draw <= 1;
+  end else begin
+    bt_draw <= 0;
   end
 end
 
 logic [7:0] curr_color_own;
 logic old_btn3;
+logic bt_draw;
 parameter BLACK = 8'h00, WHITE = 8'hFF, RED = 8'hF8, BLUE = 8'h1F;
 logic [1:0] color_counter;
 always_ff @(posedge clk_100mhz) begin
@@ -295,7 +305,7 @@ display screen
   .row1_in(real_draw_row1),//.row1_in(draw_row1),
   .row2_in(real_draw_row1+space),//.row2_in(draw_row2),
   .color_in(draw_color),
-  .valid_in(valid_draw_data),
+  .valid_in(valid_draw_data || bt_draw),
   
   .tft_sdo(), // input
   .tft_sck(pmoda[0]),
@@ -330,9 +340,9 @@ end
 */
 
 assign draw_col1 = 239 - (2*x_out);
-assign draw_col2 = (239 - (2*x_out)) + 2;
+assign draw_col2 = (239 - (2*x_out)) + space;
 assign draw_row1 = 319 - (2*y_out);
-assign draw_row2 = (319 - (2*y_out)) + 2;
+assign draw_row2 = (319 - (2*y_out)) + space;
 assign draw_color = 8'hFF;
 assign valid_draw_data = valid_touch_out;
 
